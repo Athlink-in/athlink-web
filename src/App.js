@@ -1,10 +1,11 @@
 import logo from './logo1.png';
 import './App.css';
+import Login from './Login'
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+      {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Welome to Athlink!
@@ -17,7 +18,8 @@ function App() {
         >
           Sign Up!
         </a>
-      </header>
+      </header> */}
+      <Login/>
     </div>
   );
 }
