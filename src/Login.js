@@ -13,7 +13,8 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Image from 'mui-image';
-import Logo from "../src/logo1.png";
+import Logo from "../src/logos/logo_orange.png";
+import SignInLogo from "../src/logos/sign_in.png";
 
 
 // const theme = createTheme({
@@ -45,7 +46,7 @@ export default function Login() {
           item
           xs={false}
           sm={4}
-          md={7}
+          md={8}
           sx={{
             backgroundRepeat: 'no-repeat',
             backgroundColor: '#4976BA',
@@ -70,7 +71,7 @@ export default function Login() {
 
         </Grid>
 
-        <Grid item xs={12} sm={8} md={5} component={Paper} elevation={8} square>
+        <Grid item xs={12} sm={8} md={4} component={Paper} elevation={8} square>
           <Box
             sx={{
               my: 8,
@@ -80,9 +81,17 @@ export default function Login() {
               alignItems: 'center',
             }}
           >
-            <Typography component="h1" variant="h5">
+            <Box
+            component="img"
+            sx={{
+              height: 150,
+              width: 130
+            }}
+            src={SignInLogo}
+            />
+            {/* <Typography component="h1" variant="h5">
               Sign in
-            </Typography>
+            </Typography> */}
             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 2 }}>
               <TextField
                 onChange={(e) => setEmail(e.target.value)}
@@ -115,7 +124,7 @@ export default function Login() {
                 Sign In
               </Button>
               <Grid container>
-                <Grid item xs>
+                <Grid item xs={6}>
                   <Link href="#" variant="body2">
                     Forgot password?
                   </Link>

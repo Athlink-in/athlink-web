@@ -1,4 +1,4 @@
-import logo from './logo1.png';
+import logo from '../src/logos/logo_orange.png';
 import './App.css';
 import Login from './Login'
 
