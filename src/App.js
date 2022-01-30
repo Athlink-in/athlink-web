@@ -1,6 +1,10 @@
 import logo from '../src/logos/logo_orange.png';
 import './App.css';
 import Login from './Login'
+import {BrowserRouter as Router, Routes,  Route} from "react-router-dom"; 
+import { AuthProvider } from "./contexts/authContext"
+import PrivateRoute from './PrivateRoute';
+import MainContent from "./mainContent"
 
 function App() {
   return (
@@ -19,7 +23,17 @@ function App() {
           Sign Up!
         </a>
       </header> */}
-      <Login/>
+      <Router>
+        <AuthProvider>
+          <Routes>
+            <Route exact path="/login" element={<Login></Login>}></Route>
+            <Route exact path='/' element={<PrivateRoute/>}>
+              <Route exact path='/' element={<MainContent/>}/>
+            </Route>
+          </Routes>
+        </AuthProvider>
+      </Router>
+
     </div>
   );
 }
