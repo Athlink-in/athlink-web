@@ -26,14 +26,13 @@ function App() {
       <Router>
         <AuthProvider>
           <Routes>
-            <Route exact path="/login" element={<Login></Login>}></Route>
+            <Route exact path="/login" element={<Login/>}></Route>
             <Route exact path='/' element={<PrivateRoute/>}>
               <Route exact path='/' element={<MainContent/>}/>
             </Route>
           </Routes>
         </AuthProvider>
       </Router>
-
     </div>
   );
 }
