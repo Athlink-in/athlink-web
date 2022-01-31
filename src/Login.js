@@ -21,19 +21,27 @@ import { useAuth } from './contexts/authContext';
 //   spacing: 8
 // });
 
-
 export default function Login() {
   const { signup } = useAuth();
   const navigate = useNavigate();
 
-  async function handleSubmit(event) {
+  // async function handleSubmit(event) {
+  //   event.preventDefault();
+  //   // console.log('submitted');
+  //   // console.log(email);
+  //   // console.log(password);
+  //   await signup();
+  //   navigate('/');
+  // }
+
+  const handleSubmit = useCallback(async (event) => {
     event.preventDefault();
     // console.log('submitted');
     // console.log(email);
     // console.log(password);
     await signup();
     navigate('/');
-  }
+  });
 
   return (
     // <ThemeProvider theme={theme}>
@@ -65,7 +73,7 @@ export default function Login() {
           component="h1"
           variant="h5"
           style={{
-            fontFamily: 'Roboto', fontSize: 50, fontWeight: 'bolder', color:'white'
+            fontFamily: 'Roboto', fontSize: 50, fontWeight: 'bolder', color: 'white',
           }}
         >
           Future of athletic recruitment
@@ -95,7 +103,7 @@ export default function Login() {
           </Typography> */}
           <Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 2 }}>
             <TextField
-              onChange={(e) => setEmail(e.target.value)}
+              // onChange={(e) => setEmail(e.target.value)}
               margin='normal'
               required
               fullWidth
@@ -106,7 +114,7 @@ export default function Login() {
               autoFocus
             />
             <TextField
-              onChange={(e) => setPassword(e.target.value)}
+              // onChange={(e) => setPassword(e.target.value)}
               margin='normal'
               required
               fullWidth
@@ -120,7 +128,9 @@ export default function Login() {
               type='submit'
               fullWidth
               variant='contained'
-              sx={{ mt: 3, mb: 2, backgroundColor:'#FFBD59', fontWeight: 'bolder' }}
+              sx={{
+                mt: 3, mb: 2, backgroundColor: '#FFBD59', fontWeight: 'bolder',
+              }}
             >
               Sign In
             </Button>
@@ -132,23 +142,29 @@ export default function Login() {
               </Grid>
               <Grid item>
                 <Link href='#' variant='body2'>
-                  {'Dont have an account? Sign Up'}
+                  Dont have an account? Sign Up
                 </Link>
               </Grid>
             </Grid>
           </Box>
-            <Typography variant='body2' color='text.secondary' align='center' 
-              sx={{ position: 'fixed', bottom: 0, right: 5, fontFamily: 'Roboto', fontWeight: 100}}
-            >
-              {'© '}
-              {new Date().getFullYear()}{' '}
-              <Link color='inherit' href='https://athlink.in/'>
-                Athlink.in, Inc.
-              </Link>
-            </Typography>
-          </Box>
-        </Grid>
+          <Typography
+            variant='body2'
+            color='text.secondary'
+            align='center'
+            sx={{
+              position: 'fixed', bottom: 0, right: 5, fontFamily: 'Roboto', fontWeight: 100,
+            }}
+          >
+            {'© '}
+            {new Date().getFullYear()}
+            {' '}
+            <Link color='inherit' href='https://athlink.in/'>
+              Athlink.in, Inc.
+            </Link>
+          </Typography>
+        </Box>
       </Grid>
+    </Grid>
     // </ThemeProvider>
   );
 }

@@ -1,10 +1,10 @@
-import logo from '../src/logos/logo_orange.png';
 import './App.css';
-import Login from './Login'
-import {BrowserRouter as Router, Routes,  Route} from "react-router-dom"; 
-import { AuthProvider } from "./contexts/authContext"
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React from 'react';
+import Login from './Login';
+import { AuthProvider } from './contexts/authContext';
 import PrivateRoute from './PrivateRoute';
-import MainContent from "./mainContent"
+import MainContent from './mainContent';
 
 function App() {
   return (
@@ -26,9 +26,9 @@ function App() {
       <Router>
         <AuthProvider>
           <Routes>
-            <Route exact path="/login" element={<Login/>}></Route>
-            <Route exact path='/' element={<PrivateRoute/>}>
-              <Route exact path='/' element={<MainContent/>}/>
+            <Route exact path="/login" element={<Login />} />
+            <Route exact path='/' element={<PrivateRoute />}>
+              <Route exact path='/' element={<MainContent />} />
             </Route>
           </Routes>
         </AuthProvider>

@@ -1,42 +1,39 @@
-import React, { useContext, createContext, useEffect, useState } from "react";
-import { auth, signInWithGoogle } from "../firebase";
+import React, { useContext, createContext, useEffect, useState } from 'react';
+import { auth, signInWithGoogle } from '../firebase';
 
 const AuthContext = createContext();
 
-export function useAuth(){
-    return useContext(AuthContext);
- }
+export function useAuth() {
+  return useContext(AuthContext);
+}
 
-export function AuthProvider({children}){
-    const [currentUser, setCurrentUser] = useState();
-    const [loading, setLoading] = useState(true);
+export function AuthProvider({ children }) {
+  const [currentUser, setCurrentUser] = useState();
+  const [loading, setLoading] = useState(true);
 
+  function signup() {
+    return signInWithGoogle().then(() => console.log(currentUser));
+  }
 
-    function signup(email, password, userName, firstName, lastName){
-        return signInWithGoogle().then((res) => console.log(currentUser)).then(
-            console.log(currentUser)
-        )
-    }
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
+      setCurrentUser(user);
+      setLoading(false);
+    });
 
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-           setCurrentUser(user);
-           setLoading(false);
-        });
-  
-        return unsubscribe;
-    }, []);
+    return unsubscribe;
+  }, []);
 
-     const value = {
-        currentUser,
-        signup,
-    };
+  const value = {
+    currentUser,
+    signup,
+  };
 
-    return (
-        <div>
-           <AuthContext.Provider value={value}>
-              {!loading && children}
-           </AuthContext.Provider>
-        </div>
-     );
+  return (
+    <div>
+      <AuthContext.Provider value={value}>
+        {!loading && children}
+      </AuthContext.Provider>
+    </div>
+  );
 }
