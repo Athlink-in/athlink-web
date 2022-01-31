@@ -6,6 +6,7 @@
         "jsx-a11y/anchor-is-valid": "off",
         "react/prop-types": "off",
         "react/jsx-no-constructed-context-values": "off",
-        "object-curly-newline": "off"
+        "object-curly-newline": "off",
+        "linebreak-style":"off"
     }
 }
