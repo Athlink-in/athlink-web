@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -15,8 +15,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Image from 'mui-image';
 import Logo from "../src/logos/logo_orange.png";
 import SignInLogo from "../src/logos/sign_in.png";
-
-
+import { useAuth } from "./contexts/authContext"
+import { useNavigate } from "react-router-dom";
 // const theme = createTheme({
 //   typography: {
 //     fontFamily: [
@@ -27,17 +27,24 @@ import SignInLogo from "../src/logos/sign_in.png";
 //   spacing: 8
 // });
 
+
 export default function Login() {
+  const { signup } = useAuth()
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+
+  async function handleSubmit(event) {
     event.preventDefault();
-    console.log("submitted");
-    console.log(email);
-    console.log(password);
+    // console.log("submitted");
+    // console.log(email);
+    // console.log(password);
+    await signup();
+    navigate("/");
   };
+
 
   return (
     // <ThemeProvider theme={theme}>
