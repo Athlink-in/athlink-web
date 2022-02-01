@@ -9,7 +9,7 @@ import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-butto
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import React, { useCallback } from 'react';
-import Logo from './logos/logo_orange.png';
+import Logo from './logos/login_cover_2.png';
 import NoTextLogo from './logos/logo_no_text.png';
 // import SignInLogo from './logos/sign_in.png';
 import { useAuth } from './contexts/authContext';
@@ -38,11 +38,11 @@ export default function Login() {
         sx={{
           backgroundRepeat: 'no-repeat',
           backgroundColor: '#4976BA',
-          backgroundSize: 'cover',
           backgroundPosition: 'center',
         }}
       >
-        <Box
+        <img src={Logo} alt="Login Cover" width='100%' height="100%" />
+        {/* <Box
           component="img"
           sx={{
             height: '100vh',
@@ -52,7 +52,7 @@ export default function Login() {
           }}
           alt="The house from the offer."
           src={Logo}
-        />
+        /> */}
         {/* <Typography
           component="h1"
           variant="h5"
@@ -63,7 +63,6 @@ export default function Login() {
           Future of athletic recruitment
         </Typography> */}
       </Grid>
-
       <Grid item xs={12} sm={8} md={4} component={Paper} elevation={8} square>
         <Box
           sx={{
@@ -80,6 +79,9 @@ export default function Login() {
             sx={{
               height: 75,
               width: 100,
+              marginTop: 2,
+              marginLeft: -2,
+              marginBottom: -1,
             }}
             src={NoTextLogo}
           />
@@ -87,12 +89,13 @@ export default function Login() {
             component="h1"
             variant="h4"
             align='left'
+            fontWeight='bold'
             sx={{ mt: 10 }}
           >
             Future of athletic recruitment
           </Typography>
 
-          <Typography align='left' component="h1" variant="h5" sx={{ mt: 5 }}>
+          <Typography align='left' component="h1" variant="h5" fontWeight='bold' sx={{ mt: 5 }}>
             Join Athlink - it&#39;s free!
           </Typography>
 
