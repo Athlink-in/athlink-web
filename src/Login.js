@@ -1,38 +1,22 @@
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+// import Button from '@mui/material/Button';
+// import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 // import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
 import React, { useCallback } from 'react';
 import Logo from './logos/logo_orange.png';
-import SignInLogo from './logos/sign_in.png';
+import NoTextLogo from './logos/logo_no_text.png';
+// import SignInLogo from './logos/sign_in.png';
 import { useAuth } from './contexts/authContext';
-// const theme = createTheme({
-//   typography: {
-//     fontFamily: [
-//       'Roboto',
-//       'sans-serif'
-//     ].join(','),
-//   },
-//   spacing: 8
-// });
 
 export default function Login() {
   const { signup } = useAuth();
   const navigate = useNavigate();
-
-  // async function handleSubmit(event) {
-  //   event.preventDefault();
-  //   // console.log('submitted');
-  //   // console.log(email);
-  //   // console.log(password);
-  //   await signup();
-  //   navigate('/');
-  // }
 
   const handleSubmit = useCallback(async (event) => {
     event.preventDefault();
@@ -61,15 +45,15 @@ export default function Login() {
         <Box
           component="img"
           sx={{
-            height: 500,
-            width: 500,
+            height: '100vh',
+            width: '100vh',
             // maxHeight: { xs: 233, md: 167 },
             // maxWidth: { xs: 350, md: 250 },
           }}
           alt="The house from the offer."
           src={Logo}
         />
-        <Typography
+        {/* <Typography
           component="h1"
           variant="h5"
           style={{
@@ -77,32 +61,43 @@ export default function Login() {
           }}
         >
           Future of athletic recruitment
-        </Typography>
+        </Typography> */}
       </Grid>
 
       <Grid item xs={12} sm={8} md={4} component={Paper} elevation={8} square>
         <Box
           sx={{
-            my: 8,
+            mt: 20,
             mx: 4,
             display: 'flex',
             flexDirection: 'column',
-            alignItems: 'center',
+            // alignItems: 'center',
+            // backgroundColor: 'red'
           }}
         >
           <Box
             component='img'
             sx={{
-              height: 150,
-              width: 130,
+              height: 75,
+              width: 100,
             }}
-            src={SignInLogo}
+            src={NoTextLogo}
           />
-          {/* <Typography component='h1' variant='h5'>
-            Sign in
-          </Typography> */}
-          <Box component='form' noValidate onSubmit={handleSubmit} sx={{ mt: 2 }}>
-            <TextField
+          <Typography
+            component="h1"
+            variant="h4"
+            align='left'
+            sx={{ mt: 10 }}
+          >
+            Future of athletic recruitment
+          </Typography>
+
+          <Typography align='left' component="h1" variant="h5" sx={{ mt: 5 }}>
+            Join Athlink - it&#39;s free!
+          </Typography>
+
+          <Box component='form' noValidate sx={{ mt: 5 }}>
+            {/* <TextField
               // onChange={(e) => setEmail(e.target.value)}
               margin='normal'
               required
@@ -123,8 +118,8 @@ export default function Login() {
               type='password'
               id='password'
               autoComplete='current-password'
-            />
-            <Button
+            /> */}
+            {/* <Button
               type='submit'
               fullWidth
               variant='contained'
@@ -133,8 +128,11 @@ export default function Login() {
               }}
             >
               Sign In
-            </Button>
-            <Grid container>
+            </Button> */}
+
+            <GoogleLoginButton onClick={handleSubmit} style={{ width: 300, marginBottom: 15 }} />
+            <FacebookLoginButton onClick={handleSubmit} style={{ width: 300, marginBottom: 15 }} />
+            {/* <Grid container>
               <Grid item xs={6}>
                 <Link href='#' variant='body2'>
                   Forgot password?
@@ -145,7 +143,7 @@ export default function Login() {
                   Dont have an account? Sign Up
                 </Link>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Box>
           <Typography
             variant='body2'

@@ -5,6 +5,7 @@ import Login from './Login';
 import { AuthProvider } from './contexts/authContext';
 import PrivateRoute from './PrivateRoute';
 import MainContent from './mainContent';
+import About from './About';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
             <Route exact path="/login" element={<Login />} />
             <Route exact path='/' element={<PrivateRoute />}>
               <Route exact path='/' element={<MainContent />} />
+              <Route exact path='/about' element={<About />}> </Route>
             </Route>
           </Routes>
         </AuthProvider>
