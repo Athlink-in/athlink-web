@@ -4,11 +4,21 @@ import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import Paper from '@mui/material/Paper';
 import AppBar from '@mui/material/AppBar';
+import Badge from '@mui/material/Badge';
+import MenuItem from '@mui/material/MenuItem';
+import Menu from '@mui/material/Menu';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+// import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import MailIcon from '@mui/icons-material/Mail';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 import Logo from './logos/logo_side_text.png';
+
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -58,6 +68,54 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 }));
 
 function MainContent() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  // const [setMobileMoreAnchorEl] = React.useState(null);
+
+  const isMenuOpen = Boolean(anchorEl);
+  // const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+  const handleProfileMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  // const handleMobileMenuClose = () => {
+  //   setMobileMoreAnchorEl(null);
+  // };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    // handleMobileMenuClose();
+  };
+
+  // const handleMobileMenuOpen = (event) => {
+  //   setMobileMoreAnchorEl(event.currentTarget);
+  // };
+
+  const menuId = 'primary-search-account-menu';
+  const renderMenu = (
+    <Menu
+      sx={{ mt: '45px' }}
+      anchorEl={anchorEl}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      id={menuId}
+      keepMounted
+      transformOrigin={{
+        vertical: 'top',
+        horizontal: 'right',
+      }}
+      open={isMenuOpen}
+      onClose={handleMenuClose}
+    >
+      {settings.map((setting) => (
+        <MenuItem key={setting} onClick={handleMenuClose}>
+          <Typography textAlign="center">{setting}</Typography>
+        </MenuItem>
+      ))}
+    </Menu>
+  );
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
@@ -82,8 +140,38 @@ function MainContent() {
               inputProps={{ 'aria-label': 'search' }}
             />
           </Search>
+          <Box sx={{ flexGrow: 1 }} />
+          <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <IconButton size="large" aria-label="show 4 new mails" color="inherit">
+              <Badge badgeContent={4} color="error">
+                <MailIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              size="large"
+              aria-label="show 17 new notifications"
+              color="inherit"
+            >
+              <Badge badgeContent={17} color="error">
+                <NotificationsIcon />
+              </Badge>
+            </IconButton>
+            <IconButton
+              size="large"
+              edge="end"
+              aria-label="account of current user"
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleProfileMenuOpen}
+              color="inherit"
+              sx={{ p: 0 }}
+            >
+              <AccountCircle />
+            </IconButton>
+          </Box>
         </Toolbar>
       </AppBar>
+      {renderMenu}
       <Grid container spacing={2}>
         <Grid item xs={4}>
           <Item>This is where the tools will go</Item>
