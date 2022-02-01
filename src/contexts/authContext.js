@@ -1,4 +1,5 @@
 import React, { useContext, createContext, useEffect, useState } from 'react';
+import { signOut } from 'firebase/auth';
 import { auth, signInWithGoogle } from '../firebase';
 
 const AuthContext = createContext();
@@ -15,6 +16,14 @@ export function AuthProvider({ children }) {
     return signInWithGoogle().then(() => console.log(currentUser));
   }
 
+  function signout() {
+    signOut(auth).then(() => {
+      // Sign-out successful.
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       setCurrentUser(user);
@@ -27,6 +36,7 @@ export function AuthProvider({ children }) {
   const value = {
     currentUser,
     signup,
+    signout,
   };
 
   return (

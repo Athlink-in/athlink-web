@@ -17,8 +17,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Logo from './logos/logo_side_text.png';
-
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+import { useAuth } from './contexts/authContext';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -68,6 +67,18 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 }));
 
 function MainContent() {
+  const { signout } = useAuth();
+
+  const settings = [
+    { name: 'Profile',
+      fun: null },
+    { name: 'Account',
+      fun: null },
+    { name: 'Dashboard',
+      fun: null },
+    { name: 'Logout',
+      fun: signout }];
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   // const [setMobileMoreAnchorEl] = React.useState(null);
 
@@ -110,8 +121,8 @@ function MainContent() {
       onClose={handleMenuClose}
     >
       {settings.map((setting) => (
-        <MenuItem key={setting} onClick={handleMenuClose}>
-          <Typography textAlign="center">{setting}</Typography>
+        <MenuItem key={setting.name} onClick={setting.fun}>
+          <Typography textAlign="center">{setting.name}</Typography>
         </MenuItem>
       ))}
     </Menu>
@@ -164,7 +175,6 @@ function MainContent() {
               aria-haspopup="true"
               onClick={handleProfileMenuOpen}
               color="inherit"
-              sx={{ p: 0 }}
             >
               <AccountCircle />
             </IconButton>
