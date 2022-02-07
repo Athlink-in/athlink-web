@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 // import Paper from '@mui/material/Paper';
 // import { useNavigate } from 'react-router-dom';
 import React from 'react';
-import MainContent from './mainContent';
+// import MainContent from './mainContent';
 import Logo from './logos/logo_orange.png';
 import Background from './logos/sports_background.png';
 import Phani from './logos/phani.png';
@@ -20,7 +20,7 @@ export default function About() {
   return (
     /* add navbar here */
     <Grid container component='main'>
-      <MainContent />
+      {/* <MainContent /> */}
       {/* about us section  */}
       <Grid item xs={false} sm={12} md={12} sx={{ backgroundColor: 'white' }}>
         <Box sx={{ backgroundImage: `url(${Background})`, height: 170 }}>
