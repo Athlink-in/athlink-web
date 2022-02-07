@@ -15,15 +15,20 @@ import NoTextLogo from './logos/logo_no_text.png';
 import { useAuth } from './contexts/authContext';
 
 export default function Login() {
-  const { signup } = useAuth();
+  const { signInGoogle, signInFacebook, currentUser } = useAuth();
   const navigate = useNavigate();
 
-  const handleSubmit = useCallback(async (event) => {
+  console.log('login - ', currentUser);
+  const handleGoogle = useCallback(async (event) => {
     event.preventDefault();
-    // console.log('submitted');
-    // console.log(email);
-    // console.log(password);
-    await signup();
+    await signInGoogle();
+    navigate('/');
+    // console.log(currentUser);
+  });
+
+  const handleFB = useCallback(async (event) => {
+    event.preventDefault();
+    await signInFacebook();
     navigate('/');
   });
 
@@ -133,8 +138,11 @@ export default function Login() {
               Sign In
             </Button> */}
 
-            <GoogleLoginButton onClick={handleSubmit} style={{ width: 300, marginBottom: 15 }} />
-            <FacebookLoginButton onClick={handleSubmit} style={{ width: 300, marginBottom: 15 }} />
+            <GoogleLoginButton
+              onClick={handleGoogle}
+              style={{ width: 300, marginBottom: 15 }}
+            />
+            <FacebookLoginButton onClick={handleFB} style={{ width: 300, marginBottom: 15 }} />
             {/* <Grid container>
               <Grid item xs={6}>
                 <Link href='#' variant='body2'>

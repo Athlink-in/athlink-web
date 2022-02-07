@@ -1,6 +1,6 @@
 import React, { useContext, createContext, useEffect, useState } from 'react';
 import { signOut } from 'firebase/auth';
-import { auth, signInWithGoogle } from '../firebase';
+import { auth, signInWithGoogle, signInWithFacebook } from '../firebase';
 
 const AuthContext = createContext();
 
@@ -12,8 +12,12 @@ export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState();
   const [loading, setLoading] = useState(true);
 
-  function signup() {
-    return signInWithGoogle().then(() => console.log(currentUser));
+  function signInGoogle() {
+    return signInWithGoogle().then((user) => console.log(user));
+  }
+
+  function signInFacebook() {
+    return signInWithFacebook().then(() => console.log(currentUser));
   }
 
   function signout() {
@@ -35,7 +39,8 @@ export function AuthProvider({ children }) {
 
   const value = {
     currentUser,
-    signup,
+    signInGoogle,
+    signInFacebook,
     signout,
   };
 
