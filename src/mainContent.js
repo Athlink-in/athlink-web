@@ -10,7 +10,6 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
-// import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
@@ -18,6 +17,7 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Logo from './logos/logo_side_text.png';
+import PostModal from './PostModal';
 import { useAuth } from './contexts/authContext';
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -191,10 +191,16 @@ function MainContent() {
         <Grid item xs={4}>
           <Item>This is where the tools will go</Item>
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={7}>
           <Item>This is for the feed</Item>
         </Grid>
       </Grid>
+      {/* <Fa
+        component='image'
+        sx={{ position: 'absolute', bottom: 16, right: 16 }}
+        src={SpeedDialIcon}
+      /> */}
+      <PostModal />
     </Box>
   );
 }

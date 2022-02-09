@@ -158,6 +158,16 @@ export default function Login() {
           </Box>
           <Typography
             variant='body2'
+            sx={{
+              position: 'fixed', bottom: 8, fontWeight: 200,
+            }}
+          >
+            <Link style={{ textDecoration: 'none' }} href='/about'>
+              About us
+            </Link>
+          </Typography>
+          <Typography
+            variant='body2'
             color='text.secondary'
             align='center'
             sx={{
