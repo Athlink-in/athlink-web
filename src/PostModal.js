@@ -60,8 +60,8 @@ export default function PostModal() {
         BackdropComponent={Backdrop}
       >
         <Box sx={style}>
-          <h2 id="unstyled-modal-title">Text in a modal</h2>
-          <p id="unstyled-modal-description">Aliquid amet deserunt earum!</p>
+          <h2 id="unstyled-modal-title">Share Something...</h2>
+          <p id="unstyled-modal-description">Text</p>
           <Button onClick={handleClose} sx={{ marginLeft: -1 }}>Close</Button>
         </Box>
       </StyledModal>

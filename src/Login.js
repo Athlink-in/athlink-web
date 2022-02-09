@@ -1,6 +1,6 @@
 // import Button from '@mui/material/Button';
 // import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -13,6 +13,7 @@ import Logo from './logos/login_cover_2.png';
 import NoTextLogo from './logos/logo_no_text.png';
 // import SignInLogo from './logos/sign_in.png';
 import { useAuth } from './contexts/authContext';
+import BottomBar from './BottomBar';
 
 export default function Login() {
   const { signInGoogle, signInFacebook, currentUser } = useAuth();
@@ -34,7 +35,7 @@ export default function Login() {
 
   return (
     // <ThemeProvider theme={theme}>
-    <Grid container component="main" sx={{ height: '100vh' }}>
+    <Grid container component="main" sx={{ height: '95vh' }}>
       <Grid
         item
         xs={false}
@@ -47,28 +48,8 @@ export default function Login() {
         }}
       >
         <img src={Logo} alt="Login Cover" width='100%' height="100%" />
-        {/* <Box
-          component="img"
-          sx={{
-            height: '100vh',
-            width: '100vh',
-            // maxHeight: { xs: 233, md: 167 },
-            // maxWidth: { xs: 350, md: 250 },
-          }}
-          alt="The house from the offer."
-          src={Logo}
-        /> */}
-        {/* <Typography
-          component="h1"
-          variant="h5"
-          style={{
-            fontFamily: 'Roboto', fontSize: 50, fontWeight: 'bolder', color: 'white',
-          }}
-        >
-          Future of athletic recruitment
-        </Typography> */}
       </Grid>
-      <Grid item xs={12} sm={8} md={4} component={Paper} elevation={8} square>
+      <Grid item xs={12} sm={8} md={4} component={Paper} elevation={0} square>
         <Box
           sx={{
             mt: 20,
@@ -105,68 +86,13 @@ export default function Login() {
           </Typography>
 
           <Box component='form' noValidate sx={{ mt: 5 }}>
-            {/* <TextField
-              // onChange={(e) => setEmail(e.target.value)}
-              margin='normal'
-              required
-              fullWidth
-              id='email'
-              label='Email Address'
-              name='email'
-              autoComplete='email'
-              autoFocus
-            />
-            <TextField
-              // onChange={(e) => setPassword(e.target.value)}
-              margin='normal'
-              required
-              fullWidth
-              name='password'
-              label='Password'
-              type='password'
-              id='password'
-              autoComplete='current-password'
-            /> */}
-            {/* <Button
-              type='submit'
-              fullWidth
-              variant='contained'
-              sx={{
-                mt: 3, mb: 2, backgroundColor: '#FFBD59', fontWeight: 'bolder',
-              }}
-            >
-              Sign In
-            </Button> */}
-
             <GoogleLoginButton
               onClick={handleGoogle}
               style={{ width: 300, marginBottom: 15 }}
             />
             <FacebookLoginButton onClick={handleFB} style={{ width: 300, marginBottom: 15 }} />
-            {/* <Grid container>
-              <Grid item xs={6}>
-                <Link href='#' variant='body2'>
-                  Forgot password?
-                </Link>
-              </Grid>
-              <Grid item>
-                <Link href='#' variant='body2'>
-                  Dont have an account? Sign Up
-                </Link>
-              </Grid>
-            </Grid> */}
           </Box>
-          <Typography
-            variant='body2'
-            sx={{
-              position: 'fixed', bottom: 8, fontWeight: 200,
-            }}
-          >
-            <Link style={{ textDecoration: 'none' }} href='/about'>
-              About us
-            </Link>
-          </Typography>
-          <Typography
+          {/* <Typography
             variant='body2'
             color='text.secondary'
             align='center'
@@ -180,9 +106,10 @@ export default function Login() {
             <Link color='inherit' href='https://athlink.in/'>
               Athlink.in, Inc.
             </Link>
-          </Typography>
+          </Typography> */}
         </Box>
       </Grid>
+      <BottomBar />
     </Grid>
     // </ThemeProvider>
   );

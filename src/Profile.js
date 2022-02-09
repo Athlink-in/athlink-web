@@ -11,8 +11,8 @@ import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
-import MainContent from './mainContent';
 import { useAuth } from './contexts/authContext';
+import NavBar from './NavBar';
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
@@ -82,7 +82,7 @@ export default function About() {
 
   return (
     <Grid container component='main'>
-      <MainContent />
+      <NavBar />
       {/* top section  */}
       <Grid item xs={12} sm={6} md={6} sx={{ backgroundColor: 'white' }}>
 

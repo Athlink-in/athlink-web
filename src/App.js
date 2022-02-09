@@ -31,7 +31,7 @@ function App() {
             <Route exact path="/login" element={<Login />} />
             <Route exact path='/' element={<PrivateRoute />}>
               <Route exact path='/' element={<MainContent />} />
-              <Route exact path='/about' element={<About />}> </Route>
+              {/* <Route exact path='/about' element={<About />}> </Route> */}
               <Route exact path='/profile' element={<Profile />}> </Route>
             </Route>
             <Route exact path='/about' element={<About />}> </Route>
