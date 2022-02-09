@@ -2,6 +2,7 @@ import React from 'react';
 import Grid from '@mui/material/Grid';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
+import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 import AppBar from '@mui/material/AppBar';
 import Badge from '@mui/material/Badge';
@@ -67,9 +68,12 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
 }));
 
 function MainContent() {
-  const { signout } = useAuth();
+  const { signout, currentUser } = useAuth();
 
   const settings = [
+    {
+      name: currentUser.multiFactor.user.displayName,
+      fun: null },
     { name: 'Profile',
       fun: null },
     { name: 'Account',
@@ -123,6 +127,7 @@ function MainContent() {
       {settings.map((setting) => (
         <MenuItem key={setting.name} onClick={setting.fun}>
           <Typography textAlign="center">{setting.name}</Typography>
+          <Divider />
         </MenuItem>
       ))}
     </Menu>
