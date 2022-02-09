@@ -31,11 +31,8 @@ function App() {
             <Route exact path="/login" element={<Login />} />
             <Route exact path='/' element={<PrivateRoute />}>
               <Route exact path='/' element={<MainContent />} />
-<<<<<<< HEAD
               <Route exact path='/about' element={<About />}> </Route>
               <Route exact path='/profile' element={<Profile />}> </Route>
-=======
->>>>>>> b5c5e1dbd34a1702f64504d4053d48aef460b2da
             </Route>
             <Route exact path='/about' element={<About />}> </Route>
           </Routes>
