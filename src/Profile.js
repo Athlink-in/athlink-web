@@ -9,16 +9,9 @@ import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
-// import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
-// import MainContent from './mainContent';
-// import Logo from './logos/logo_orange.png';
-// import Background from './logos/sports_background.png';
-// import Phani from './logos/phani.png';
-import Kee from './logos/kee.png';
-// import Ishaan from './logos/ishaan.png';
-// import Brandon from './logos/brandon.png';
+import MainContent from './mainContent';
 import { useAuth } from './contexts/authContext';
 
 function createData(name, calories, fat, carbs, protein) {
@@ -26,15 +19,15 @@ function createData(name, calories, fat, carbs, protein) {
 }
 
 const firstRows = [
-  createData('Height', '72 in.'),
-  createData('Weight', '200 lbs'),
-  createData('School', 'Folsom High School'),
+  createData('Height:', '72 in.'),
+  createData('Weight:', '200 lbs'),
+  createData('School:', 'Folsom High School'),
 ];
 
 const secondRows = [
-  createData('Age', '17'),
-  createData('Year', '2022'),
-  createData('Sex', 'Male'),
+  createData('Age:', '17'),
+  createData('Year:', '2022'),
+  createData('Sex:', 'Male'),
 ];
 
 function DenseTable(props) {
@@ -42,15 +35,6 @@ function DenseTable(props) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ width: '100%' }} size="small" aria-label="a dense table">
-        {/* <TableHead>
-          <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-          </TableRow>
-        </TableHead> */}
         <TableBody>
           {rows.map((row) => (
             <TableRow
@@ -88,13 +72,6 @@ function TabPanel(props) {
   );
 }
 
-// function a11yProps(index) {
-//   return {
-//     id: `simple-tab-${index}`,
-//     'aria-controls': `simple-tabpanel-${index}`,
-//   };
-// }
-
 export default function About() {
   const { currentUser } = useAuth();
   const [value, setValue] = React.useState(0);
@@ -105,7 +82,7 @@ export default function About() {
 
   return (
     <Grid container component='main'>
-      {/* <MainContent /> */}
+      <MainContent />
       {/* top section  */}
       <Grid item xs={12} sm={6} md={6} sx={{ backgroundColor: 'white' }}>
 
@@ -113,9 +90,6 @@ export default function About() {
           sx={{
             display: 'flex',
             flexDirection: 'column',
-            // justifyContent: 'center',
-            // alignItems: 'center',
-            // backgroundColor: 'red',
             borderRadius: 1,
             ml: 5,
           }}
@@ -124,8 +98,6 @@ export default function About() {
           <Box
             sx={{
               display: 'flex',
-              // flexDirection: 'row',
-              // justifyContent: 'space-evenly',
               backgroundColor: 'white',
             }}
           >
@@ -134,12 +106,10 @@ export default function About() {
               sx={{
                 height: 250,
                 width: 250,
-                // maxHeight: { xs: 233, md: 167 },
-                // maxWidth: { xs: 350, md: 250 },
                 borderRadius: '50%',
                 mt: 2,
               }}
-              src={Kee}
+              src={currentUser.multiFactor.user.photoURL}
             />
             <Box sx={{ ml: 'auto', mt: 5, mr: 10 }}>
               <Button sx={{ height: 20, color: 'white', backgroundColor: '#4976BA' }}>
@@ -204,9 +174,6 @@ export default function About() {
           sx={{
             borderBottom: 1,
             borderColor: 'divider',
-            // display: 'flex',
-            // flexDirection: 'row',
-            // alignItems: 'center',
           }}
         >
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example" centered>
