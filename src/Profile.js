@@ -5,19 +5,44 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Paper from '@mui/material/Paper';
 import { Button } from '@mui/material';
+import Modal from '@mui/material/Modal';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
-import React from 'react';
+import TextField from '@mui/material/TextField';
+// import Input from '@mui/material/Input';
+// import FilledInput from '@mui/material/FilledInput';
+import OutlinedInput from '@mui/material/OutlinedInput';
+// import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+// import Divider from '@mui/material/Divider';
+import React, { useState } from 'react';
+import axios from 'axios';
 import { useAuth } from './contexts/authContext';
 import NavBar from './NavBar';
+
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
 
 function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
+// grab data from mongoDB
 const firstRows = [
   createData('Height:', '72 in.'),
   createData('Weight:', '200 lbs'),
@@ -53,6 +78,152 @@ function DenseTable(props) {
   );
 }
 
+function EditProfile() {
+  const [open, setOpen] = useState(false);
+
+  const [formValue, setFormValue] = useState({
+    firstname: '',
+    lastname: '',
+    weight: 0,
+    height: 0,
+    age: 0,
+    school: '',
+    gradyear: 2022,
+    sex: '',
+  });
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleChange = (e) => {
+    setFormValue({
+      ...formValue,
+      [e.target.id]: e.target.value,
+    });
+    console.log(formValue);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const backend = `${process.env.REACT_APP_BACKEND_HOST}/user`;
+    axios.post(backend, formValue).then((res) => console.log(res));
+  };
+
+  return (
+    <div>
+      <Button onClick={handleOpen} sx={{ height: 20, color: 'white', backgroundColor: '#4976BA' }}>
+        Edit Profile
+      </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+      >
+        <Box sx={{ ...style, width: 400 }}>
+          <Typography
+            variant="h4"
+            align='left'
+            fontWeight='bold'
+            sx={{ mt: 3 }}
+          >
+            Edit Profile
+          </Typography>
+          <hr style={{ marginBottom: 20 }} />
+          <TextField
+            required
+            fullWidth
+            onChange={handleChange}
+            id="firstname"
+            label="First name"
+            defaultValue=''
+            sx={{ mb: 3 }}
+          />
+
+          <TextField
+            required
+            fullWidth
+            onChange={handleChange}
+            id="lastname"
+            label="Last name"
+            defaultValue=''
+            sx={{ mb: 3 }}
+          />
+
+          <FormControl fullWidth sx={{ mb: 3 }} variant="outlined">
+            <OutlinedInput
+              id="weight"
+              defaultValue={0}
+              onChange={handleChange}
+              endAdornment={<InputAdornment position="end">lbs</InputAdornment>}
+            />
+            <FormHelperText id="outlined-weight-text">Weight</FormHelperText>
+          </FormControl>
+
+          <FormControl fullWidth sx={{ mb: 3 }} variant="outlined">
+            <OutlinedInput
+              id="height"
+              defaultValue={0}
+              onChange={handleChange}
+              endAdornment={<InputAdornment position="end">inches</InputAdornment>}
+            />
+            <FormHelperText id="outlined-weight-text">Height</FormHelperText>
+          </FormControl>
+
+          <TextField
+            required
+            fullWidth
+            onChange={handleChange}
+            id="age"
+            label="Age"
+            defaultValue=''
+            sx={{ mb: 3 }}
+          />
+
+          <TextField
+            required
+            fullWidth
+            onChange={handleChange}
+            id="school"
+            label="School"
+            defaultValue=''
+            sx={{ mb: 3 }}
+          />
+
+          <TextField
+            required
+            fullWidth
+            onChange={handleChange}
+            id="gradyear"
+            label="Year"
+            defaultValue=''
+            sx={{ mb: 3 }}
+          />
+
+          <TextField
+            required
+            fullWidth
+            onChange={handleChange}
+            id="sex"
+            label="Sex"
+            defaultValue=''
+            sx={{ mb: 3 }}
+          />
+
+          <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
+            <Button type='submit' onClick={handleSubmit} sx={{ height: 50, color: 'white', backgroundColor: '#4976BA' }}>
+              Save
+            </Button>
+          </Box>
+
+        </Box>
+      </Modal>
+    </div>
+  );
+}
+
 function TabPanel(props) {
   const { children, value, index } = props;
 
@@ -79,6 +250,8 @@ export default function About() {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  // get data using useEffect hook
 
   return (
     <Grid container component='main'>
@@ -112,9 +285,7 @@ export default function About() {
               src={currentUser.multiFactor.user.photoURL}
             />
             <Box sx={{ ml: 'auto', mt: 5, mr: 10 }}>
-              <Button sx={{ height: 20, color: 'white', backgroundColor: '#4976BA' }}>
-                Edit Profile
-              </Button>
+              <EditProfile />
             </Box>
           </Box>
 
