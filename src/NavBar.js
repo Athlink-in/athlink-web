@@ -122,15 +122,17 @@ function NavBar() {
       <AppBar position="static" style={{ background: '#4976BA' }}>
         <Toolbar variant="dense">
           <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <Box
-              component='img'
-              sx={{
-                mt: -1, // margin-top
-                height: 50,
-                width: 190,
-              }}
-              src={Logo}
-            />
+            <Link href='/'>
+              <Box
+                component='img'
+                sx={{
+                  mt: -1, // margin-top
+                  height: 45,
+                  width: 190,
+                }}
+                src={Logo}
+              />
+            </Link>
           </IconButton>
           <Search>
             <SearchIconWrapper>
