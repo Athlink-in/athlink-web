@@ -84,11 +84,13 @@ function EditProfile() {
   const [formValue, setFormValue] = useState({
     firstname: '',
     lastname: '',
-    weight: 0,
+    email: 'keeratg@gmail.com',
+    memberSince: null,
     height: 0,
     age: 0,
     school: '',
-    gradyear: 2022,
+    weight: 0,
+    gradYear: 2022,
     sex: '',
   });
 
@@ -104,12 +106,12 @@ function EditProfile() {
       ...formValue,
       [e.target.id]: e.target.value,
     });
-    console.log(formValue);
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     const backend = `${process.env.REACT_APP_BACKEND_HOST}/user`;
+    console.log(formValue);
     axios.post(backend, formValue).then((res) => console.log(res));
   };
 
@@ -196,7 +198,7 @@ function EditProfile() {
             required
             fullWidth
             onChange={handleChange}
-            id="gradyear"
+            id="gradYear"
             label="Year"
             defaultValue=''
             sx={{ mb: 3 }}
