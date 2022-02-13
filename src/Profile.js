@@ -112,6 +112,7 @@ function EditProfile() {
     e.preventDefault();
     const backend = `${process.env.REACT_APP_BACKEND_HOST}/user`;
     console.log(formValue);
+    console.log(backend);
     axios.post(backend, formValue).then((res) => console.log(res));
   };
 
