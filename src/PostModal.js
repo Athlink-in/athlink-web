@@ -79,7 +79,7 @@ export default function PostModal() {
       <Fab
         color='primary'
         aria-label='add'
-        sx={{ position: 'absolute', bottom: 16, right: 20 }}
+        sx={{ position: 'absolute', bottom: 16, right: 20, backgroundColor: '#4976BA' }}
         onClick={handleOpen}
       >
         <AddIcon />
@@ -112,6 +112,7 @@ export default function PostModal() {
           <Button
             variant='contained'
             onClick={handleClose}
+            sx={{ backgroundColor: '#4976BA', fontWeight: 'bold' }}
           >
             Close
           </Button>
@@ -119,7 +120,7 @@ export default function PostModal() {
             variant='contained'
             onClick={handleSubmit}
             endIcon={<SendIcon />}
-            sx={{ ml: 54 }}
+            sx={{ ml: 54, backgroundColor: '#4976BA', fontWeight: 'bold' }}
           >
             Post
           </Button>

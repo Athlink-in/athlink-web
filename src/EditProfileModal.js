@@ -79,7 +79,7 @@ export default function EditProfileModal(props) {
 
   return (
     <div>
-      <Button onClick={handleOpen} variant='contained'>
+      <Button onClick={handleOpen} variant='contained' sx={{ backgroundColor: '#4976BA', fontWeight: 'bold' }}>
         Edit Profile
       </Button>
       <Modal
@@ -204,8 +204,11 @@ export default function EditProfileModal(props) {
           />
 
           <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
-            <Button type='submit' onClick={handleSubmit} variant='contained'>
+            <Button type='submit' onClick={handleSubmit} variant='contained' sx={{ backgroundColor: '#4976BA', fontWeight: 'bold' }}>
               Save
+            </Button>
+            <Button type='submit' onClick={handleClose} variant='contained' sx={{ backgroundColor: '#4976BA', fontWeight: 'bold', mr: 'auto' }}>
+              Close
             </Button>
           </Box>
 

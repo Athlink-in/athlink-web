@@ -204,7 +204,7 @@ export default function About() {
         </TabPanel>
       </Grid>
 
-      <PostModal />
+      {(currentUser.multiFactor.user.email === email) && <PostModal />}
 
     </Grid>
   );
