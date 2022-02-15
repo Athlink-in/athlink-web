@@ -11,6 +11,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 import { useAuth } from './contexts/authContext';
 import NavBar from './NavBar';
 import PostModal from './PostModal';
@@ -74,6 +75,7 @@ function TabPanel(props) {
 
 export default function About() {
   const { currentUser } = useAuth();
+  const { email } = useParams() ?? currentUser.multiFactor.user.email;
   console.log(currentUser);
   const [value, setValue] = React.useState(0);
   const [formValue, setFormValue] = useState({});
@@ -86,7 +88,7 @@ export default function About() {
   useEffect(() => {
     console.log('inside useEffect profile');
     console.log(currentUser.multiFactor.user.email);
-    const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/${currentUser.multiFactor.user.email}`;
+    const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/${email}`;
     axios.get(backend).then((data) => setFormValue(data.data[0]));
   }, []);
 
@@ -122,7 +124,8 @@ export default function About() {
               src={currentUser.multiFactor.user.photoURL}
             />
             <Box sx={{ ml: 'auto', mt: 5, mr: 10 }}>
-              <EditProfileModal formValue={formValue} setFormValue={setFormValue} />
+              {(currentUser.multiFactor.user.email === email)
+              && <EditProfile formValue={formValue} setFormValue={setFormValue} />}
             </Box>
           </Box>
 
