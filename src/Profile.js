@@ -20,7 +20,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 // import Divider from '@mui/material/Divider';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useAuth } from './contexts/authContext';
 import NavBar from './NavBar';
@@ -38,22 +38,36 @@ const style = {
   pb: 3,
 };
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
+// function createData(name, calories, fat, carbs, protein) {
+//   return { name, calories, fat, carbs, protein };
+// }
+
+function createData(formValue, rowNum) {
+  const res = [];
+  if (rowNum === 1) {
+    res.push({ item: 'Height:', value: formValue.height });
+    res.push({ item: 'Weight:', value: formValue.weight });
+    res.push({ item: 'School:', value: formValue.school });
+  } else {
+    res.push({ item: 'Age:', value: formValue.age });
+    res.push({ item: 'Year:', value: formValue.gradYear });
+    res.push({ item: 'Sex:', value: formValue.sex });
+  }
+  return res;
 }
 
 // grab data from mongoDB
-const firstRows = [
-  createData('Height:', '72 in.'),
-  createData('Weight:', '200 lbs'),
-  createData('School:', 'Folsom High School'),
-];
+// const firstRows = [
+//   createData('Height:', '72 in.'),
+//   createData('Weight:', '200 lbs'),
+//   createData('School:', 'Folsom High School'),
+// ];
 
-const secondRows = [
-  createData('Age:', '17'),
-  createData('Year:', '2022'),
-  createData('Sex:', 'Male'),
-];
+// const secondRows = [
+//   createData('Age:', '17'),
+//   createData('Year:', '2022'),
+//   createData('Sex:', 'Male'),
+// ];
 
 function DenseTable(props) {
   const { rows } = props;
@@ -63,13 +77,13 @@ function DenseTable(props) {
         <TableBody>
           {rows.map((row) => (
             <TableRow
-              key={row.name}
+              key={row.item}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                {row.item}
               </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
+              <TableCell align="right">{row.value}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -78,21 +92,29 @@ function DenseTable(props) {
   );
 }
 
-function EditProfile() {
+function EditProfile(props) {
   const [open, setOpen] = useState(false);
+  const { formValue, setFormValue } = props;
+  const [editedFormValue, setEditedFormValue] = useState(formValue);
 
-  const [formValue, setFormValue] = useState({
-    firstname: '',
-    lastname: '',
-    email: 'keeratg@gmail.com',
-    memberSince: null,
-    height: 0,
-    age: 0,
-    school: '',
-    weight: 0,
-    gradYear: 2022,
-    sex: '',
-  });
+  console.log('inside edit profile');
+  console.log(editedFormValue);
+  // const [formValue, setFormValue] = useState({
+  //   firstname: '',
+  //   lastname: '',
+  //   email: 'keeratg@gmail.com',
+  //   memberSince: null,
+  //   height: 0,
+  //   age: 0,
+  //   school: '',
+  //   weight: 0,
+  //   gradYear: 2022,
+  //   sex: '',
+  // });
+
+  useEffect(() => {
+    setEditedFormValue(formValue);
+  }, [formValue]);
 
   const handleOpen = () => {
     setOpen(true);
@@ -102,8 +124,8 @@ function EditProfile() {
   };
 
   const handleChange = (e) => {
-    setFormValue({
-      ...formValue,
+    setEditedFormValue({
+      ...editedFormValue,
       [e.target.id]: e.target.value,
     });
   };
@@ -111,9 +133,13 @@ function EditProfile() {
   const handleSubmit = (e) => {
     e.preventDefault();
     const backend = `${process.env.REACT_APP_BACKEND_HOST}/user`;
-    console.log(formValue);
-    console.log(backend);
-    axios.post(backend, formValue).then((res) => console.log(res));
+    // console.log(formValue);
+    // console.log(backend);
+    axios.post(backend, formValue).then(
+      () => setFormValue(editedFormValue),
+    ).catch(
+      () => setFormValue(editedFormValue),
+    );
   };
 
   return (
@@ -141,7 +167,7 @@ function EditProfile() {
             onChange={handleChange}
             id="firstname"
             label="First name"
-            defaultValue=''
+            defaultValue={editedFormValue.firstname}
             sx={{ mb: 3 }}
           />
 
@@ -151,14 +177,14 @@ function EditProfile() {
             onChange={handleChange}
             id="lastname"
             label="Last name"
-            defaultValue=''
+            defaultValue={editedFormValue.lastname}
             sx={{ mb: 3 }}
           />
 
           <FormControl fullWidth sx={{ mb: 3 }} variant="outlined">
             <OutlinedInput
               id="weight"
-              defaultValue={0}
+              defaultValue={editedFormValue.weight}
               onChange={handleChange}
               endAdornment={<InputAdornment position="end">lbs</InputAdornment>}
             />
@@ -168,7 +194,7 @@ function EditProfile() {
           <FormControl fullWidth sx={{ mb: 3 }} variant="outlined">
             <OutlinedInput
               id="height"
-              defaultValue={0}
+              defaultValue={editedFormValue.height}
               onChange={handleChange}
               endAdornment={<InputAdornment position="end">inches</InputAdornment>}
             />
@@ -181,7 +207,7 @@ function EditProfile() {
             onChange={handleChange}
             id="age"
             label="Age"
-            defaultValue=''
+            defaultValue={editedFormValue.age}
             sx={{ mb: 3 }}
           />
 
@@ -191,7 +217,7 @@ function EditProfile() {
             onChange={handleChange}
             id="school"
             label="School"
-            defaultValue=''
+            defaultValue={editedFormValue.school}
             sx={{ mb: 3 }}
           />
 
@@ -201,7 +227,7 @@ function EditProfile() {
             onChange={handleChange}
             id="gradYear"
             label="Year"
-            defaultValue=''
+            defaultValue={editedFormValue.gradYear}
             sx={{ mb: 3 }}
           />
 
@@ -211,7 +237,7 @@ function EditProfile() {
             onChange={handleChange}
             id="sex"
             label="Sex"
-            defaultValue=''
+            defaultValue={editedFormValue.sex}
             sx={{ mb: 3 }}
           />
 
@@ -248,13 +274,21 @@ function TabPanel(props) {
 
 export default function About() {
   const { currentUser } = useAuth();
+  console.log(currentUser);
   const [value, setValue] = React.useState(0);
+  const [formValue, setFormValue] = useState({});
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
   // get data using useEffect hook
+  useEffect(() => {
+    console.log('inside useEffect profile');
+    console.log(currentUser.multiFactor.user.email);
+    const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/${currentUser.multiFactor.user.email}`;
+    axios.get(backend).then((data) => setFormValue(data.data[0]));
+  }, []);
 
   return (
     <Grid container component='main'>
@@ -288,7 +322,7 @@ export default function About() {
               src={currentUser.multiFactor.user.photoURL}
             />
             <Box sx={{ ml: 'auto', mt: 5, mr: 10 }}>
-              <EditProfile />
+              <EditProfile formValue={formValue} setFormValue={setFormValue} />
             </Box>
           </Box>
 
@@ -331,10 +365,10 @@ export default function About() {
 
           <Grid container>
             <Grid item sx={{ mr: 5 }}>
-              <DenseTable rows={firstRows} />
+              <DenseTable rows={createData(formValue, 1)} />
             </Grid>
             <Grid item>
-              <DenseTable rows={secondRows} />
+              <DenseTable rows={createData(formValue, 2)} />
             </Grid>
           </Grid>
 
