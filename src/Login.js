@@ -8,7 +8,8 @@ import Grid from '@mui/material/Grid';
 import { FacebookLoginButton, GoogleLoginButton } from 'react-social-login-buttons';
 import Typography from '@mui/material/Typography';
 import { useNavigate } from 'react-router-dom';
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import axios from 'axios';
 import Logo from './logos/login_cover_2.png';
 import NoTextLogo from './logos/logo_no_text.png';
 // import SignInLogo from './logos/sign_in.png';
@@ -20,11 +21,74 @@ export default function Login() {
   const navigate = useNavigate();
 
   console.log('login - ', currentUser);
+
+  useEffect(() => {
+    if (currentUser) {
+      const { creationTime } = currentUser.multiFactor.user.metadata;
+      const { lastSignInTime } = currentUser.multiFactor.user.metadata;
+      console.log('inside create user');
+      console.log(creationTime, lastSignInTime);
+      if (currentUser.metadata.creationTime === currentUser.metadata.lastSignInTime) {
+        const backend = `${process.env.REACT_APP_BACKEND_HOST}/user`;
+        const name = currentUser.multiFactor.user.displayName.split(' ');
+        const formValue = {
+          firstname: name[0],
+          lastname: name[1],
+          email: currentUser.multiFactor.user.email,
+          memberSince: null,
+          height: null,
+          age: null,
+          school: '',
+          weight: null,
+          gradYear: null,
+          sex: null,
+          description: null,
+        };
+
+        axios.post(backend, formValue).then(
+          (res) => console.log(res),
+        ).catch(
+          (error) => console.log(error),
+        );
+      }
+    }
+  }, [currentUser]);
+
+  // const createUser = () => {
+  //   const { creationTime } = currentUser.multiFactor.user.metadata;
+  //   const { lastSignInTime } = currentUser.multiFactor.user.metadata;
+  //   console.log('inside create user');
+  //   console.log(creationTime, lastSignInTime);
+  //   if (creationTime === lastSignInTime) {
+  //     console.log('first time logged in');
+  //     const backend = `${process.env.REACT_APP_BACKEND_HOST}/user`;
+  //     const name = currentUser.multiFactor.user.displayName.split(' ');
+  //     const formValue = {
+  //       firstname: name[0],
+  //       lastname: name[1],
+  //       email: currentUser.multiFactor.user.email,
+  //       memberSince: null,
+  //       height: null,
+  //       age: null,
+  //       school: '',
+  //       weight: null,
+  //       gradYear: null,
+  //       sex: null,
+  //       description: null,
+  //     };
+
+  //     axios.post(backend, formValue).then(
+  //       (res) => console.log(res),
+  //     ).catch(
+  //       (error) => console.log(error),
+  //     );
+  //   }
+  // };
+
   const handleGoogle = useCallback(async (event) => {
     event.preventDefault();
     await signInGoogle();
     navigate('/');
-    // console.log(currentUser);
   });
 
   const handleFB = useCallback(async (event) => {
