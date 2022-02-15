@@ -191,7 +191,7 @@ export default function EditProfileModal(props) {
             </Grid>
           </Grid>
 
-          {/* <TextField
+          <TextField
             required
             fullWidth
             multiline
@@ -201,7 +201,7 @@ export default function EditProfileModal(props) {
             defaultValue={editedFormValue.description}
             sx={{ mb: 3 }}
             rows={5}
-          /> */}
+          />
 
           <Box sx={{ display: 'flex', flexDirection: 'row-reverse' }}>
             <Button type='submit' onClick={handleSubmit} variant='contained'>

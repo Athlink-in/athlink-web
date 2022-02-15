@@ -43,6 +43,7 @@ export default function Login() {
           gradYear: null,
           sex: null,
           description: null,
+          photoURL: currentUser.multiFactor.user.photoURL,
         };
 
         axios.post(backend, formValue).then(

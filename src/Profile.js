@@ -75,7 +75,8 @@ function TabPanel(props) {
 
 export default function About() {
   const { currentUser } = useAuth();
-  const { email } = useParams() ?? currentUser.multiFactor.user.email;
+  const params = useParams();
+  const email = params.email ?? currentUser.multiFactor.user.email;
   console.log(currentUser);
   const [value, setValue] = React.useState(0);
   const [formValue, setFormValue] = useState({});
@@ -89,7 +90,11 @@ export default function About() {
     console.log('inside useEffect profile');
     console.log(currentUser.multiFactor.user.email);
     const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/${email}`;
-    axios.get(backend).then((data) => setFormValue(data.data[0]));
+    axios.get(backend).then((data) => {
+      console.log('SMD');
+      console.log(data);
+      setFormValue(data.data[0]);
+    });
   }, []);
 
   return (
@@ -121,11 +126,11 @@ export default function About() {
                 borderRadius: '50%',
                 mt: 2,
               }}
-              src={currentUser.multiFactor.user.photoURL}
+              src={formValue.photoURL}
             />
             <Box sx={{ ml: 'auto', mt: 5, mr: 10 }}>
               {(currentUser.multiFactor.user.email === email)
-              && <EditProfile formValue={formValue} setFormValue={setFormValue} />}
+              && <EditProfileModal formValue={formValue} setFormValue={setFormValue} />}
             </Box>
           </Box>
 
@@ -135,7 +140,7 @@ export default function About() {
             fontWeight='bold'
             sx={{ mt: 2 }}
           >
-            {currentUser.multiFactor.user.displayName}
+            {`${formValue.firstname} ${formValue.lastname}`}
           </Typography>
 
           <Typography
@@ -153,8 +158,7 @@ export default function About() {
             // fontWeight='bold'
             sx={{ mt: 2, width: '75%' }}
           >
-            Incoming SDE Intern @ Expedia Group |
-            Computer Science Student at California Polytechnic State University-San Luis Obispo
+            {formValue.description}
           </Typography>
 
           <Typography
