@@ -56,19 +56,6 @@ function createData(formValue, rowNum) {
   return res;
 }
 
-// grab data from mongoDB
-// const firstRows = [
-//   createData('Height:', '72 in.'),
-//   createData('Weight:', '200 lbs'),
-//   createData('School:', 'Folsom High School'),
-// ];
-
-// const secondRows = [
-//   createData('Age:', '17'),
-//   createData('Year:', '2022'),
-//   createData('Sex:', 'Male'),
-// ];
-
 function DenseTable(props) {
   const { rows } = props;
   return (
