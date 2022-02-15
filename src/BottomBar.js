@@ -6,13 +6,7 @@ import Grid from '@mui/material/Grid';
 
 const links = [
   { name: 'About',
-    ref: '/about' },
-  { name: 'Placeholder',
-    ref: null },
-  { name: 'Placeholder',
-    ref: null },
-  { name: 'Placeholder',
-    ref: null }];
+    ref: '/about' }];
 
 export default function BottomBar() {
   return (

@@ -12,6 +12,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 // import Divider from '@mui/material/Divider';
+import EditIcon from '@mui/icons-material/Edit';
 import axios from 'axios';
 
 const style = {
@@ -71,7 +72,10 @@ export default function EditProfileModal(props) {
     // console.log(formValue);
     // console.log(backend);
     axios.post(backend, editedFormValue).then(
-      () => setFormValue(editedFormValue),
+      () => {
+        setFormValue(editedFormValue);
+        handleClose();
+      },
     ).catch(
       (error) => console.log(error),
     );
@@ -79,7 +83,7 @@ export default function EditProfileModal(props) {
 
   return (
     <div>
-      <Button onClick={handleOpen} variant='contained' sx={{ backgroundColor: '#4976BA', fontWeight: 'bold' }}>
+      <Button onClick={handleOpen} variant='contained' sx={{ backgroundColor: '#4976BA', fontWeight: 'bold' }} startIcon={<EditIcon />}>
         Edit Profile
       </Button>
       <Modal
