@@ -38,10 +38,6 @@ const style = {
   pb: 3,
 };
 
-// function createData(name, calories, fat, carbs, protein) {
-//   return { name, calories, fat, carbs, protein };
-// }
-
 function createData(formValue, rowNum) {
   const res = [];
   if (rowNum === 1) {
