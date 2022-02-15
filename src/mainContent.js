@@ -18,15 +18,29 @@ export default function MainContent() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <NavBar />
-      <Grid container spacing={2} justifyContent='center'>
+      <Grid container spacing={2} justifyContent='center' sx={{ mt: 1 }}>
         <Grid item xs={2}>
           <Item>This is where the tools will go</Item>
         </Grid>
-        <Grid item xs={6} style={{ textAlign: 'center' }}>
-          <Item>
-            {/* This is for the feed */}
-            <Feed />
-          </Item>
+        <Grid
+          item
+          xs={6}
+          style={{ maxHeight: '90vh', overflow: 'auto' }}
+          sx={{
+            '&::-webkit-scrollbar': {
+              width: 5,
+            },
+            '&::-webkit-scrollbar-track': {
+              backgroundColor: 'white',
+            },
+            '&::-webkit-scrollbar-thumb': {
+              backgroundColor: 'lightgray',
+              borderRadius: 10,
+            },
+          }}
+        >
+          {/* This is for the feed */}
+          <Feed />
         </Grid>
         <Grid item xs={2}>
           <Item>maybe stuff here</Item>
