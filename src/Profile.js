@@ -113,15 +113,15 @@ function EditProfile(props) {
     });
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
+    // e.preventDefault();
     const backend = `${process.env.REACT_APP_BACKEND_HOST}/user`;
     // console.log(formValue);
     // console.log(backend);
-    axios.post(backend, formValue).then(
+    axios.post(backend, editedFormValue).then(
       () => setFormValue(editedFormValue),
     ).catch(
-      () => setFormValue(editedFormValue),
+      (error) => console.log(error),
     );
   };
 
