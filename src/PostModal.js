@@ -42,7 +42,7 @@ const style = {
   pb: 3,
 };
 
-export default function PostModal() {
+export default function PostModal({ setFeed }) {
   const { currentUser } = useAuth();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -50,9 +50,10 @@ export default function PostModal() {
 
   const [formValue, setFormValue] = useState({
     email: currentUser.multiFactor.user.email,
-    text: '',
-    videoLink: '',
+    postContent: '',
+    linkUrl: '',
     likes: 0,
+    photoUrl: currentUser.multiFactor.user.photoURL,
   });
 
   const handleChange = (e) => {
@@ -64,14 +65,15 @@ export default function PostModal() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const backend = `${process.env.REACT_APP_BACKEND_HOST}/user`;
+    const backend = `${process.env.REACT_APP_BACKEND_HOST}/post`;
     // console.log(formValue);
     // console.log(backend);
     axios.post(backend, formValue).then(
-      (data) => console.log(data),
+      setFeed((prev) => [formValue, ...prev]),
     ).catch(
       (error) => console.log(error),
     );
+    handleClose();
   };
 
   return (
@@ -97,7 +99,7 @@ export default function PostModal() {
             fullWidth
             multiline
             onChange={handleChange}
-            id="text"
+            id="postContent"
             label="Text"
             rows={6}
             sx={{ mb: 3 }}
@@ -105,7 +107,7 @@ export default function PostModal() {
           <TextField
             fullWidth
             onChange={handleChange}
-            id="videoLink"
+            id="linkUrl"
             label="Video URL"
             sx={{ mb: 3 }}
           />

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
+import axios from 'axios';
 import NavBar from './NavBar';
 import PostModal from './PostModal';
 import Feed from './Feed';
@@ -15,6 +16,13 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function MainContent() {
+  const [feed, setFeed] = useState();
+
+  useEffect(() => {
+    const backend = `${process.env.REACT_APP_BACKEND_HOST}/post`;
+    axios.get(backend, { params: { limit: 4, slice: 0 } }).then((data) => setFeed(data.data)).then(console.log(feed));
+  }, []);
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <NavBar />
@@ -40,13 +48,13 @@ export default function MainContent() {
           }}
         >
           {/* This is for the feed */}
-          <Feed />
+          <Feed feed={feed} setFeed={setFeed} />
         </Grid>
         <Grid item xs={2}>
           <Item>maybe stuff here</Item>
         </Grid>
       </Grid>
-      <PostModal />
+      <PostModal feed={feed} setFeed={setFeed} />
     </Box>
   );
 }
