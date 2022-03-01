@@ -21,7 +21,7 @@ export default function MainContent() {
 
   useEffect(() => {
     const backend = `${process.env.REACT_APP_BACKEND_HOST}/post`;
-    axios.get(backend, { params: { limit: 4, slice: 0 } }).then((data) => setFeed(data.data)).then(console.log(feed));
+    axios.get(backend, { params: { limit: 50, slice: 0 } }).then((data) => setFeed(data.data)).then(console.log(feed));
   }, []);
 
   return (
@@ -50,7 +50,7 @@ export default function MainContent() {
           }}
         >
           {/* This is for the feed */}
-          <Feed feed={feed} setFeed={setFeed} />
+          <Feed feed={feed} />
         </Grid>
         <Grid item xs={2}>
           <Item>maybe stuff here</Item>

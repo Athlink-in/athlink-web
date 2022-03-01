@@ -7,6 +7,7 @@ import PrivateRoute from './PrivateRoute';
 import MainContent from './mainContent';
 import About from './About';
 import Profile from './Profile';
+import Messages from './Messages';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
               {/* <Route exact path='/about' element={<About />}> </Route> */}
               <Route exact path='/profile' element={<Profile />}> </Route>
               <Route path="/profile/:email" element={<Profile />} />
+              <Route exact path='/messages' element={<Messages />} />
             </Route>
             <Route exact path='/about' element={<About />}> </Route>
           </Routes>

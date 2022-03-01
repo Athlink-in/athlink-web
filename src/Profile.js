@@ -16,6 +16,7 @@ import { useAuth } from './contexts/authContext';
 import NavBar from './NavBar';
 import PostModal from './PostModal';
 import EditProfileModal from './EditProfileModal';
+import Feed from './Feed';
 
 function createData(formValue, rowNum) {
   const res = [];
@@ -80,6 +81,7 @@ export default function About() {
   console.log(currentUser);
   const [value, setValue] = React.useState(0);
   const [formValue, setFormValue] = useState({});
+  const [feed, setFeed] = useState([]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -95,6 +97,8 @@ export default function About() {
       console.log(data);
       setFormValue(data.data[0]);
     });
+    const postendpoint = `${process.env.REACT_APP_BACKEND_HOST}/post`;
+    axios.get(postendpoint, { params: { limit: 100, user: email } }).then((data) => setFeed(data.data)).then(console.log(feed));
   }, []);
 
   return (
@@ -197,14 +201,31 @@ export default function About() {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          Put all user posts here
+          <Grid
+            item
+            style={{ maxHeight: '80vh', overflow: 'auto' }}
+            sx={{
+              '&::-webkit-scrollbar': {
+                width: 5,
+              },
+              '&::-webkit-scrollbar-track': {
+                backgroundColor: 'white',
+              },
+              '&::-webkit-scrollbar-thumb': {
+                backgroundColor: 'lightgray',
+                borderRadius: 10,
+              },
+            }}
+          >
+            <Feed feed={feed} />
+          </Grid>
         </TabPanel>
         <TabPanel value={value} index={1}>
           Show all videos here
         </TabPanel>
       </Grid>
 
-      {(currentUser.multiFactor.user.email === email) && <PostModal />}
+      {(currentUser.multiFactor.user.email === email) && <PostModal setFeed={setFeed} />}
 
     </Grid>
   );

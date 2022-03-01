@@ -49,11 +49,14 @@ export default function PostModal({ setFeed }) {
   const handleClose = () => setOpen(false);
 
   const [formValue, setFormValue] = useState({
-    email: currentUser.multiFactor.user.email,
+    userEmail: currentUser.multiFactor.user.email,
     postContent: '',
+    timePosted: null,
     linkUrl: '',
     likes: 0,
     photoUrl: currentUser.multiFactor.user.photoURL,
+    tags: [],
+    userName: currentUser.multiFactor.user.displayName,
   });
 
   const handleChange = (e) => {
@@ -68,9 +71,10 @@ export default function PostModal({ setFeed }) {
     const backend = `${process.env.REACT_APP_BACKEND_HOST}/post`;
     // console.log(formValue);
     // console.log(backend);
-    axios.post(backend, formValue).then(
-      setFeed((prev) => [formValue, ...prev]),
-    ).catch(
+    axios.post(backend, formValue).then(() => {
+      formValue.timePosted = `${Date.now()}`;
+      setFeed((prev) => [formValue, ...prev]);
+    }).catch(
       (error) => console.log(error),
     );
     handleClose();
