@@ -7,6 +7,7 @@ import axios from 'axios';
 import NavBar from './NavBar';
 import PostModal from './PostModal';
 import Feed from './Feed';
+import Tags from './Tags';
 
 const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
@@ -27,8 +28,9 @@ export default function MainContent() {
     <Box sx={{ flexGrow: 1 }}>
       <NavBar />
       <Grid container spacing={2} justifyContent='center' sx={{ mt: 1 }}>
-        <Grid item xs={2}>
-          <Item>This is where the tools will go</Item>
+        <Grid item xs={2} sx={{ background: 'white' }}>
+          {/* <Item>This is where the tools will go</Item> */}
+          <Tags setFeed={setFeed} />
         </Grid>
         <Grid
           item
