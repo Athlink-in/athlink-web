@@ -32,23 +32,32 @@ function CardThing({ src, date, title, content, linkUrl, email }) {
   return (
     <>
       <Card>
-        <Link href={`/profile/${email}`} sx={{ textDecoration: 'none' }}>
-          <CardHeader
-            avatar={
-              <Avatar alt='Brandon Burana' src={src} aria-label="test2" sx={{ height: 48, width: 48 }} />
-            }
-            action={(
-              <IconButton aria-label="settings">
-                <MoreVertIcon />
-              </IconButton>
+        <CardHeader
+          avatar={(
+            <Link href={`/profile/${email}`} sx={{ textDecoration: 'none' }}>
+              <Avatar
+                alt='Brandon Burana'
+                src={src}
+                aria-label="test2"
+                sx={{ height: 48, width: 48 }}
+              />
+            </Link>
+          )}
+          action={(
+            <IconButton aria-label="settings">
+              <MoreVertIcon />
+            </IconButton>
+          )}
+          titleTypographyProps={{ variant: 'inherit' }}
+          subheaderTypographyProps={{ variant: 'inherit' }}
+          title={(
+            <Link href={`/profile/${email}`} sx={{ textDecoration: 'none' }}>
+              {title}
+            </Link>
             )}
-            titleTypographyProps={{ variant: 'inherit' }}
-            subheaderTypographyProps={{ variant: 'inherit' }}
-            title={title}
-            subheader={date}
-            sx={{ textAlign: 'left' }}
-          />
-        </Link>
+          subheader={date}
+          sx={{ textAlign: 'left' }}
+        />
         <CardContent>
           <Typography variant="body1" color="text.secondary" sx={{ mb: 2, mt: -2, textAlign: 'left', fontWeight: 600 }}>
             {content}
