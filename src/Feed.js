@@ -25,7 +25,7 @@ import { useAuth } from './contexts/authContext';
 // General structure of a post in the feed
 // Need to retrieve posts and use mapping to display in this way
 
-function CardThing({ src, date, title, content, linkUrl, email, postId, likes, liked }) {
+export function CardThing({ src, date, title, content, linkUrl, email, postId, likes, liked }) {
   const { currentUser } = useAuth();
   const [likedState, setLikedState] = useState(liked);
   const [likesCount, setLikesCount] = useState(likes);
@@ -33,7 +33,7 @@ function CardThing({ src, date, title, content, linkUrl, email, postId, likes, l
   const updateLike = async () => {
     console.log(postId, currentUser.multiFactor.user.email);
     const backend = `${process.env.REACT_APP_BACKEND_HOST}/post/like`;
-    axios.post(backend, { params: { postId, email: currentUser.multiFactor.user.email } }).catch(
+    axios.post(backend, {}, { params: { postId, email: currentUser.multiFactor.user.email } }).catch(
       (error) => console.log(error),
     );
   };

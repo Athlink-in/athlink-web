@@ -8,6 +8,7 @@ import MainContent from './mainContent';
 import About from './About';
 import Profile from './Profile';
 import Messages from './Messages';
+import PostPage from './PostPage';
 
 function App() {
   return (
@@ -36,6 +37,7 @@ function App() {
               <Route exact path='/profile' element={<Profile />}> </Route>
               <Route path="/profile/:email" element={<Profile />} />
               <Route exact path='/messages' element={<Messages />} />
+              <Route path='/post/:postId' element={<PostPage />} />
             </Route>
             <Route exact path='/about' element={<About />}> </Route>
           </Routes>

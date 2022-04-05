@@ -58,6 +58,7 @@ export default function PostModal({ setFeed }) {
     photoUrl: currentUser.multiFactor.user.photoURL,
     tags: [],
     userName: currentUser.multiFactor.user.displayName,
+    postId: 'test',
   });
 
   const handleChange = (e) => {
