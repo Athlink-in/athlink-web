@@ -13,11 +13,15 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 // import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
+// import SendIcon from '@mui/icons-material/Send';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import axios from 'axios';
 import { useAuth } from './contexts/authContext';
@@ -29,6 +33,9 @@ export function CardThing({ src, date, title, content, linkUrl, email, postId, l
   const { currentUser } = useAuth();
   const [likedState, setLikedState] = useState(liked);
   const [likesCount, setLikesCount] = useState(likes);
+  const [comments, setComments] = useState([]);
+  const [showComments, setShowComments] = useState(false);
+  const [commentValue, setComment] = useState();
 
   const updateLike = async () => {
     console.log(postId, currentUser.multiFactor.user.email);
@@ -36,6 +43,20 @@ export function CardThing({ src, date, title, content, linkUrl, email, postId, l
     axios.post(backend, {}, { params: { postId, email: currentUser.multiFactor.user.email } }).catch(
       (error) => console.log(error),
     );
+  };
+
+  const handleChange = (event) => {
+    setComment(event.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(commentValue);
+    setComments([...comments, { content: commentValue }]);
+  };
+
+  const handleComments = () => {
+    setShowComments(!showComments);
   };
 
   const toggleLike = () => {
@@ -50,6 +71,10 @@ export function CardThing({ src, date, title, content, linkUrl, email, postId, l
       setLikesCount(likedState ? likesCount + 1 : likesCount - 1);
     }
   }, [likedState]);
+
+  useEffect(() => {
+
+  });
 
   return (
     <>
@@ -107,9 +132,90 @@ export function CardThing({ src, date, title, content, linkUrl, email, postId, l
             <ShareIcon />
           </IconButton>
         </CardActions>
+        <CardContent>
+          <Box sx={{ display: 'flex', flexDirection: 'row', mb: 2 }}>
+            <TextField
+              required
+              multiline
+              onChange={handleChange}
+              size='small'
+              id="comment-field"
+              label="Add a comment..."
+              align='left'
+              // defaultValue={editedFormValue.description}
+              sx={{ width: '90%', mr: '5px' }}
+              rows={1}
+            />
+            <Button
+              variant='contained'
+              onClick={handleSubmit}
+              // endIcon={<SendIcon />}
+              sx={{ backgroundColor: '#4976BA', fontWeight: 'bold', mr: 'auto' }}
+            >
+              Post
+            </Button>
+          </Box>
+
+          <Box onClick={handleComments}>
+            <Typography variant="body1" color="#4976BA" sx={{ mb: 2, mt: -1, textAlign: 'left', fontWeight: 600 }}>
+              View comments
+            </Typography>
+          </Box>
+
+          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+            {showComments && comments && comments.map((x) => (
+              <Comment src={src} title={title} date={date} content={x.content} />
+            ))}
+          </Box>
+        </CardContent>
       </Card>
       <Divider />
     </>
+  );
+}
+
+function Comment({ src, date, title, content }) {
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+      <Box
+        component="img"
+        sx={{
+          height: 40,
+          width: 40,
+          borderRadius: '50%',
+          mt: 2,
+        }}
+        src={src}
+      />
+      <Box
+        sx={{
+          // position: 'relative',
+          // borderRadius: 16,
+          // padding: '4px 15px',
+          // display: 'inline-block',
+          display: 'flex',
+          flexDirection: 'column',
+          mt: '5px',
+          mb: '5px',
+          ml: '5px',
+          background: '#E0E0E0',
+          color: 'white',
+          width: '100%',
+          borderRadius: '15px',
+        }}
+      >
+        <Typography variant="body1" color="#4976BA" sx={{ textAlign: 'left', ml: 2, fontWeight: 600 }}>
+          {title}
+        </Typography>
+        <Typography variant="body1" color="black" sx={{ textAlign: 'left', ml: 2, fontWeight: 400 }}>
+          {date}
+        </Typography>
+        <Typography variant="body1" color="black" sx={{ textAlign: 'left', mt: 2, ml: 2, mb: 1, fontWeight: 600 }}>
+          {content}
+        </Typography>
+      </Box>
+
+    </Box>
   );
 }
 
@@ -138,6 +244,7 @@ export default function Feed({ feed }) {
           postId={x.postId}
           likes={x.likeCount}
           liked={x.likes.includes(currentUser.multiFactor.user.email)}
+          comments={x.comments}
         />
       ))}
     </InfiniteScroll>
