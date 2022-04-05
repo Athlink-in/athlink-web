@@ -28,17 +28,15 @@ import { useAuth } from './contexts/authContext';
 
 // General structure of a post in the feed
 // Need to retrieve posts and use mapping to display in this way
-
-export function CardThing({ src, date, title, content, linkUrl, email, postId, likes, liked }) {
+/* eslint-disable */
+export function CardThing({ src, date, title, content, linkUrl, email, postId, likes, liked, feed }) {
   const { currentUser } = useAuth();
   const [likedState, setLikedState] = useState(liked);
   const [likesCount, setLikesCount] = useState(likes);
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
   const [commentValue, setComment] = useState();
-
   const updateLike = async () => {
-    console.log(postId, currentUser.multiFactor.user.email);
     const backend = `${process.env.REACT_APP_BACKEND_HOST}/post/like`;
     axios.post(backend, {}, { params: { postId, email: currentUser.multiFactor.user.email } }).catch(
       (error) => console.log(error),
@@ -51,8 +49,23 @@ export function CardThing({ src, date, title, content, linkUrl, email, postId, l
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(commentValue);
-    setComments([...comments, { content: commentValue }]);
+    if(!commentValue || commentValue == "") 
+      return;
+    setComments(prev => [{ 
+      userEmail: currentUser.multiFactor.user.email, 
+      commentContent: commentValue,
+      userName: currentUser.multiFactor.user.displayName,
+      photoUrl: currentUser.multiFactor.user.photoURL,
+      timePosted: `${Date.now()}`,
+      postId}, ...prev]);
+    const backend = `${process.env.REACT_APP_BACKEND_HOST}/post/comment`;
+    axios.post(backend, {
+      timePosted:null, 
+      userEmail: currentUser.multiFactor.user.email, 
+      commentContent: commentValue,
+      postId
+    }).then(setComment(""))
+      
   };
 
   const handleComments = () => {
@@ -73,8 +86,9 @@ export function CardThing({ src, date, title, content, linkUrl, email, postId, l
   }, [likedState]);
 
   useEffect(() => {
-
-  });
+    const backend = `${process.env.REACT_APP_BACKEND_HOST}/post/comment`;
+    axios.get(backend, { params: { postId } }).then(data => setComments(data.data));
+  }, [feed]);
 
   return (
     <>
@@ -142,6 +156,7 @@ export function CardThing({ src, date, title, content, linkUrl, email, postId, l
               id="comment-field"
               label="Add a comment..."
               align='left'
+              value={commentValue}
               // defaultValue={editedFormValue.description}
               sx={{ width: '90%', mr: '5px' }}
               rows={1}
@@ -158,13 +173,13 @@ export function CardThing({ src, date, title, content, linkUrl, email, postId, l
 
           <Box onClick={handleComments}>
             <Typography variant="body1" color="#4976BA" sx={{ mb: 2, mt: -1, textAlign: 'left', fontWeight: 600 }}>
-              View comments
+              View {comments ? comments.length : 0} comments
             </Typography>
           </Box>
 
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             {showComments && comments && comments.map((x) => (
-              <Comment src={src} title={title} date={date} content={x.content} />
+              <Comment email={x.userEmail} src={x.photoUrl} title={x.userName} date={`${new Date(parseInt(x.timePosted, 10)).toDateString()}`} content={x.commentContent} />
             ))}
           </Box>
         </CardContent>
@@ -174,19 +189,21 @@ export function CardThing({ src, date, title, content, linkUrl, email, postId, l
   );
 }
 
-function Comment({ src, date, title, content }) {
+function Comment({ email, src, date, title, content }) {
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
-      <Box
-        component="img"
-        sx={{
-          height: 40,
-          width: 40,
-          borderRadius: '50%',
-          mt: 2,
-        }}
-        src={src}
-      />
+      <Link href={`/profile/${email}`} sx={{ textDecoration: 'none' }}>
+        <Box
+          component="img"
+          sx={{
+            height: 40,
+            width: 40,
+            borderRadius: '50%',
+            mt: 2,
+          }}
+          src={src}
+        />
+      </Link>
       <Box
         sx={{
           // position: 'relative',
@@ -204,9 +221,11 @@ function Comment({ src, date, title, content }) {
           borderRadius: '15px',
         }}
       >
-        <Typography variant="body1" color="#4976BA" sx={{ textAlign: 'left', ml: 2, fontWeight: 600 }}>
-          {title}
-        </Typography>
+        <Link href={`/profile/${email}`} sx={{ textDecoration: 'none' }}>
+          <Typography variant="body1" color="#4976BA" sx={{ textAlign: 'left', ml: 2, fontWeight: 600 }}>
+            {title}
+          </Typography>
+        </Link>
         <Typography variant="body1" color="black" sx={{ textAlign: 'left', ml: 2, fontWeight: 400 }}>
           {date}
         </Typography>
@@ -227,12 +246,11 @@ export default function Feed({ feed }) {
   // }
   const { currentUser } = useAuth();
   const length = feed ? feed.length : 0;
-  console.log(length);
 
   return (
     // <List sx={{ width: '100%', bgcolor: 'background.paper' }}>
     //   {hardCodedFeed.forEach((x) => console.log(x.src))}
-    <InfiniteScroll dataLength={length} hasMore>
+    <InfiniteScroll dataLength={length} hasMore={true}>
       {feed && feed.map((x) => (
         <CardThing
           src={x.photoUrl}
@@ -245,6 +263,7 @@ export default function Feed({ feed }) {
           likes={x.likeCount}
           liked={x.likes.includes(currentUser.multiFactor.user.email)}
           comments={x.comments}
+          feed={feed}
         />
       ))}
     </InfiniteScroll>

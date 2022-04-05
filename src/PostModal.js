@@ -9,7 +9,7 @@ import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import axios from 'axios';
 import { useAuth } from './contexts/authContext';
-
+/* eslint-disable */
 const StyledModal = styled(ModalUnstyled)`
   position: fixed;
   z-index: 1300;
@@ -42,7 +42,7 @@ const style = {
   pb: 3,
 };
 
-export default function PostModal({ setFeed }) {
+export default function PostModal({ feed, setFeed }) {
   const { currentUser } = useAuth();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -71,11 +71,10 @@ export default function PostModal({ setFeed }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     const backend = `${process.env.REACT_APP_BACKEND_HOST}/post`;
-    // console.log(formValue);
-    // console.log(backend);
-    axios.post(backend, formValue).then(() => {
+
+    axios.post(backend, formValue).then((id) => {
       formValue.timePosted = `${Date.now()}`;
-      setFeed((prev) => [formValue, ...prev]);
+      setFeed((prev) => [{ ...formValue, comments : [], postId:id.data}, ...prev]);
     }).catch(
       (error) => console.log(error),
     );
