@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 // import List from '@mui/material/List';
 // import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
@@ -19,16 +19,38 @@ import ShareIcon from '@mui/icons-material/Share';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Link from '@mui/material/Link';
-// import axios from 'axios';
-// import Brandon from './logos/brandon.png';
-// import Kee from './logos/kee.png';
-// // import Ishaan from './logos/ishaan.png';
-// import Phani from './logos/phani.png';
+import axios from 'axios';
+import { useAuth } from './contexts/authContext';
 
 // General structure of a post in the feed
 // Need to retrieve posts and use mapping to display in this way
 
-function CardThing({ src, date, title, content, linkUrl, email }) {
+function CardThing({ src, date, title, content, linkUrl, email, postId, likes, liked }) {
+  const { currentUser } = useAuth();
+  const [likedState, setLikedState] = useState(liked);
+  const [likesCount, setLikesCount] = useState(likes);
+
+  const updateLike = async () => {
+    console.log(postId, currentUser.multiFactor.user.email);
+    const backend = `${process.env.REACT_APP_BACKEND_HOST}/post/like`;
+    axios.post(backend, { params: { postId, email: currentUser.multiFactor.user.email } }).catch(
+      (error) => console.log(error),
+    );
+  };
+
+  const toggleLike = () => {
+    setLikedState(!likedState);
+    updateLike();
+  };
+
+  useEffect(() => {
+    if (liked === likedState) {
+      setLikesCount(likes);
+    } else {
+      setLikesCount(likedState ? likesCount + 1 : likesCount - 1);
+    }
+  }, [likedState]);
+
   return (
     <>
       <Card>
@@ -59,9 +81,11 @@ function CardThing({ src, date, title, content, linkUrl, email }) {
           sx={{ textAlign: 'left' }}
         />
         <CardContent>
-          <Typography variant="body1" color="text.secondary" sx={{ mb: 2, mt: -2, textAlign: 'left', fontWeight: 600 }}>
-            {content}
-          </Typography>
+          <Link href={`/post/${postId}`} sx={{ textDecoration: 'none' }}>
+            <Typography variant="body1" color="text.secondary" sx={{ mb: 2, mt: -2, textAlign: 'left', fontWeight: 600 }}>
+              {content}
+            </Typography>
+          </Link>
           {linkUrl && (
           <iframe
             title='video'
@@ -75,8 +99,9 @@ function CardThing({ src, date, title, content, linkUrl, email }) {
           )}
         </CardContent>
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
+          <IconButton aria-label="add to favorites" onClick={toggleLike}>
+            {likedState ? <FavoriteIcon sx={{ color: '#4976BA' }} /> : <FavoriteIcon />}
+            {likesCount}
           </IconButton>
           <IconButton aria-label="share">
             <ShareIcon />
@@ -94,6 +119,7 @@ export default function Feed({ feed }) {
   //   const backend = `${process.env.REACT_APP_BACKEND_HOST}/post`;
   //   axios.get(backend, { params: { limit: 5 } }).then((data) => setFeed((prev) => [...prev, data.data]));
   // }
+  const { currentUser } = useAuth();
   const length = feed ? feed.length : 0;
   console.log(length);
 
@@ -109,6 +135,9 @@ export default function Feed({ feed }) {
           content={x.postContent}
           linkUrl={x.linkUrl}
           email={x.userEmail}
+          postId={x.postId}
+          likes={x.likeCount}
+          liked={x.likes.includes(currentUser.multiFactor.user.email)}
         />
       ))}
     </InfiniteScroll>
