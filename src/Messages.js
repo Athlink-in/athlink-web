@@ -110,7 +110,7 @@ export default function Messages() {
                   backgroundColor: 'lightgray',
                   borderRadius: 10,
                 },
-                height: '72vh',
+                height: '68vh',
                 overflow: 'auto',
                 // width: 100%,
                 // border: solid 1px #EEE,
@@ -141,7 +141,7 @@ export default function Messages() {
                 hello
               </Box>
               <Box
-                label='received'
+                label='sent'
                 sx={{
                   position: 'relative',
                   borderRadius: 16,
@@ -172,18 +172,17 @@ export default function Messages() {
                 align='left'
                 // defaultValue={editedFormValue.description}
                 sx={{ width: '90%', mr: 'auto' }}
-                rows={1}
+                maxRows={3}
               />
               <Button
                 variant='contained'
                 // onClick={handleSubmit}
                 endIcon={<SendIcon />}
-                sx={{ backgroundColor: '#4976BA', fontWeight: 'bold', mr: 'auto' }}
+                sx={{ backgroundColor: '#4976BA', fontWeight: 'bold', mr: 'auto', mt: 'auto', width: '90px', height: '55px' }}
               >
                 Send
               </Button>
             </Box>
-
           </Item>
         </Grid>
 

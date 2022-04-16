@@ -9,6 +9,8 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
+import { Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -87,6 +89,8 @@ export default function About() {
     setValue(newValue);
   };
 
+  const handleConnect = () => undefined;
+
   // get data using useEffect hook
   useEffect(() => {
     console.log('inside useEffect profile');
@@ -136,6 +140,17 @@ export default function About() {
               {(currentUser.multiFactor.user.email === email)
               && <EditProfileModal formValue={formValue} setFormValue={setFormValue} />}
             </Box>
+
+            {/* This is the connections box */}
+            <Box sx={{ ml: 'auto', mt: 5, mr: 10 }}>
+              {(currentUser.multiFactor.user.email !== email)
+              && (
+                <Button onClick={handleConnect} variant='contained' sx={{ backgroundColor: '#4976BA', fontWeight: 'bold' }} endIcon={<AddIcon />}>
+                  Connect
+                </Button>
+              )}
+            </Box>
+
           </Box>
 
           <Typography
