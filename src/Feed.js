@@ -36,6 +36,7 @@ export function CardThing({ src, date, title, content, linkUrl, email, postId, l
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
   const [commentValue, setComment] = useState();
+
   const updateLike = async () => {
     const backend = `${process.env.REACT_APP_BACKEND_HOST}/post/like`;
     axios.post(backend, {}, { params: { postId, email: currentUser.multiFactor.user.email } }).catch(

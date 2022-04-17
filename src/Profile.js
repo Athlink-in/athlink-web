@@ -11,6 +11,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
+import Link from '@mui/material/Link';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -84,22 +85,46 @@ export default function About() {
   const [value, setValue] = React.useState(0);
   const [formValue, setFormValue] = useState({});
   const [feed, setFeed] = useState([]);
+  const [connectStatus, setConnectStatus] = useState(false);
+  const [numConnections, setNumConnections] = useState();
 
+  const getBackground = () => {
+    if (connectStatus === 0) return '#4976BA';
+    if (connectStatus === 2) return 'green';
+    return 'Gray';
+  };
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const handleConnect = () => undefined;
+  const handleConnect = () => {
+    const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/add`;
+    setConnectStatus(1);
+    console.log(backend);
+    axios.post(
+      backend,
+      {
+        fromEmail: currentUser.multiFactor.user.email,
+        toEmail: email,
+        status: null,
+        timeStamp: null,
+      },
+    ).catch(
+      (error) => console.log(error),
+    );
+    setNumConnections((prev) => prev + 1);
+  };
 
   // get data using useEffect hook
   useEffect(() => {
-    console.log('inside useEffect profile');
-    console.log(currentUser.multiFactor.user.email);
+    // console.log('inside useEffect profile');
+    // console.log(currentUser.multiFactor.user.email);
     const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/${email}`;
-    axios.get(backend).then((data) => {
-      console.log('SMD');
-      console.log(data);
+    axios.get(backend, { params: { user: currentUser.multiFactor.user.email } }).then((data) => {
+      // console.log(data.data[0].connection);
+      setConnectStatus(data.data[0].connection);
       setFormValue(data.data[0]);
+      setNumConnections(data.data[0].numConnections);
     });
     const postendpoint = `${process.env.REACT_APP_BACKEND_HOST}/post`;
     axios.get(postendpoint, { params: { limit: 100, user: email } }).then((data) => setFeed(data.data)).then(console.log(feed));
@@ -145,12 +170,11 @@ export default function About() {
             <Box sx={{ ml: 'auto', mt: 5, mr: 10 }}>
               {(currentUser.multiFactor.user.email !== email)
               && (
-                <Button onClick={handleConnect} variant='contained' sx={{ backgroundColor: '#4976BA', fontWeight: 'bold' }} endIcon={<AddIcon />}>
+                <Button disabled={connectStatus} onClick={handleConnect} variant='contained' sx={{ backgroundColor: getBackground(), fontWeight: 'bold' }} endIcon={<AddIcon />}>
                   Connect
                 </Button>
               )}
             </Box>
-
           </Box>
 
           <Typography
@@ -162,14 +186,18 @@ export default function About() {
             {`${formValue.firstname} ${formValue.lastname}`}
           </Typography>
 
+          {/* <Link href={`/profile/${email}`} sx={{ textDecoration: 'none' }}> */}
           <Typography
             variant='body-2'
             align='left'
             // fontWeight='bold'
             sx={{ mt: 0, color: '#4976BA' }}
           >
-            100 connections
+            <Link href={`/connections/${email}`} sx={{ textDecoration: 'none' }}>
+              {`${numConnections} connections`}
+            </Link>
           </Typography>
+          {/* </Link> */}
 
           <Typography
             variant='body-1'
@@ -197,9 +225,7 @@ export default function About() {
               <DenseTable rows={createData(formValue, 2)} />
             </Grid>
           </Grid>
-
         </Box>
-
       </Grid>
 
       {/* bottom section */}
