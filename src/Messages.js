@@ -1,13 +1,13 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import Avatar from '@mui/material/Avatar';
+// import ListItem from '@mui/material/ListItem';
+// import ListItemText from '@mui/material/ListItemText';
+// import ListItemAvatar from '@mui/material/ListItemAvatar';
+// import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
+// import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
 import MoreHorizOutlinedIcon from '@mui/icons-material/MoreHorizOutlined';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
@@ -17,6 +17,7 @@ import Button from '@mui/material/Button';
 import SendIcon from '@mui/icons-material/Send';
 // import ImageIcon from '@mui/icons-material/Image';
 import NavBar from './NavBar';
+import MessageTabs from './MessageTabs';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -31,9 +32,9 @@ export default function Messages() {
     <Grid container component='main'>
       <NavBar />
       <Grid container spacing={1} justifyContent='center' sx={{ mt: 1 }}>
-
+        <MessageTabs />
         {/* {This is the names side} */}
-        <Grid
+        {/* <Grid
           item
           xs={3}
           style={{ maxHeight: '90vh', overflow: 'auto' }}
@@ -77,7 +78,7 @@ export default function Messages() {
             </ListItem>
             <Divider />
           </Item>
-        </Grid>
+        </Grid> */}
 
         {/* This is the actual message box */}
         <Grid item xs={6} style={{ maxHeight: '90vh' }}>

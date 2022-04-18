@@ -1,21 +1,28 @@
-/* eslint-disable */
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import Link from '@mui/material/Link';
 import Avatar from '@mui/material/Avatar';
-import IconButton from '@mui/material/IconButton';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import CardContent from '@mui/material/CardContent';
-import InfiniteScroll from 'react-infinite-scroll-component';
+import Modal from '@mui/material/Modal';
+import { Button } from '@mui/material';
+import Typography from '@mui/material/Typography';
 
+const style = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  bgcolor: 'background.paper',
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
 
-
-export function DisplayProfile({ src, title, email }) {
-
+export function DisplayProfile({ src, first, last, email }) {
   return (
     <>
       <Card>
@@ -30,16 +37,11 @@ export function DisplayProfile({ src, title, email }) {
               />
             </Link>
           )}
-          action={(
-            <IconButton aria-label="settings">
-              <MoreVertIcon />
-            </IconButton>
-          )}
           titleTypographyProps={{ variant: 'inherit' }}
           subheaderTypographyProps={{ variant: 'inherit' }}
           title={(
             <Link href={`/profile/${email}`} sx={{ textDecoration: 'none' }}>
-              {title}
+              {`${first} ${last}`}
             </Link>
             )}
           // subheader={date}
@@ -54,22 +56,45 @@ export function DisplayProfile({ src, title, email }) {
   );
 }
 
+export default function Connections({ numConnections, connections }) {
+  const [open, setOpen] = useState(false);
 
-export default function Connections() {
-  const { email } = useParams();
-  const [connections, setConnections] = useState(); ``
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
-  useEffect(() => {
-    const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/connections/${email}`;
-    axios.get(backend).then((data) => setConnections(data.data)).then((data) => console.log(data));
-  }, []);
   return (
     <div>
-      {connections && connections.map(x => (<DisplayProfile
-        src={x.photoURL}
-        title={x.firstname + " " + x.lastname}
-        email={x.email}
-      ></DisplayProfile>))}
+      <Button onClick={handleOpen} variant='text' sx={{ fontWeight: 'bold', ml: -1 }}>
+        {`${numConnections} connections`}
+      </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+      >
+        <Box sx={{ ...style, width: 400 }}>
+          <Typography
+            variant="h4"
+            align='left'
+            fontWeight='bold'
+          >
+            Connections
+          </Typography>
+          <hr style={{ marginBottom: 20 }} />
+
+          {connections && connections.map((x) => (
+            <DisplayProfile
+              src={x.photoURL}
+              first={x.firstname}
+              last={x.lastname}
+              email={x.email}
+            />
+          ))}
+        </Box>
+      </Modal>
     </div>
   );
 }

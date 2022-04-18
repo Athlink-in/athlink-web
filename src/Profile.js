@@ -11,7 +11,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import { Button } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import Link from '@mui/material/Link';
+// import Link from '@mui/material/Link';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -20,6 +20,7 @@ import NavBar from './NavBar';
 import PostModal from './PostModal';
 import EditProfileModal from './EditProfileModal';
 import Feed from './Feed';
+import Connections from './Connections';
 
 function createData(formValue, rowNum) {
   const res = [];
@@ -87,6 +88,7 @@ export default function About() {
   const [feed, setFeed] = useState([]);
   const [connectStatus, setConnectStatus] = useState(false);
   const [numConnections, setNumConnections] = useState();
+  const [connections, setConnections] = useState();
 
   const getBackground = () => {
     if (connectStatus === 0) return '#4976BA';
@@ -98,7 +100,7 @@ export default function About() {
   };
 
   const handleConnect = () => {
-    const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/add`;
+    let backend = `${process.env.REACT_APP_BACKEND_HOST}/user/add`;
     setConnectStatus(1);
     console.log(backend);
     axios.post(
@@ -109,7 +111,10 @@ export default function About() {
         status: null,
         timeStamp: null,
       },
-    ).catch(
+    ).then(() => {
+      backend = `${process.env.REACT_APP_BACKEND_HOST}/user/connections/${email}`;
+      axios.get(backend).then((data) => setConnections(data.data)).then((data) => console.log(data));
+    }).catch(
       (error) => console.log(error),
     );
     setNumConnections((prev) => prev + 1);
@@ -119,7 +124,7 @@ export default function About() {
   useEffect(() => {
     // console.log('inside useEffect profile');
     // console.log(currentUser.multiFactor.user.email);
-    const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/${email}`;
+    let backend = `${process.env.REACT_APP_BACKEND_HOST}/user/${email}`;
     axios.get(backend, { params: { user: currentUser.multiFactor.user.email } }).then((data) => {
       // console.log(data.data[0].connection);
       setConnectStatus(data.data[0].connection);
@@ -128,6 +133,8 @@ export default function About() {
     });
     const postendpoint = `${process.env.REACT_APP_BACKEND_HOST}/post`;
     axios.get(postendpoint, { params: { limit: 100, user: email } }).then((data) => setFeed(data.data)).then(console.log(feed));
+    backend = `${process.env.REACT_APP_BACKEND_HOST}/user/connections/${email}`;
+    axios.get(backend).then((data) => setConnections(data.data)).then((data) => console.log(data));
   }, []);
 
   return (
@@ -161,7 +168,7 @@ export default function About() {
               }}
               src={formValue.photoURL}
             />
-            <Box sx={{ ml: 'auto', mt: 5, mr: 10 }}>
+            <Box sx={{ ml: 'auto', mt: 5 }}>
               {(currentUser.multiFactor.user.email === email)
               && <EditProfileModal formValue={formValue} setFormValue={setFormValue} />}
             </Box>
@@ -186,18 +193,14 @@ export default function About() {
             {`${formValue.firstname} ${formValue.lastname}`}
           </Typography>
 
-          {/* <Link href={`/profile/${email}`} sx={{ textDecoration: 'none' }}> */}
           <Typography
             variant='body-2'
             align='left'
             // fontWeight='bold'
             sx={{ mt: 0, color: '#4976BA' }}
           >
-            <Link href={`/connections/${email}`} sx={{ textDecoration: 'none' }}>
-              {`${numConnections} connections`}
-            </Link>
+            <Connections numConnections={numConnections} connections={connections} />
           </Typography>
-          {/* </Link> */}
 
           <Typography
             variant='body-1'

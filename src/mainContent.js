@@ -1,20 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
+// import { styled } from '@mui/material/styles';
+// import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import NavBar from './NavBar';
 import PostModal from './PostModal';
 import Feed from './Feed';
 import Tags from './Tags';
 
-const Item = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  padding: theme.spacing(1),
-  textAlign: 'center',
-  color: theme.palette.text.secondary,
-}));
+// const Item = styled(Paper)(({ theme }) => ({
+//   ...theme.typography.body2,
+//   padding: theme.spacing(1),
+//   textAlign: 'center',
+//   color: theme.palette.text.secondary,
+// }));
 
 export default function MainContent() {
   const [feed, setFeed] = useState();
@@ -52,9 +52,7 @@ export default function MainContent() {
           {/* This is for the feed */}
           <Feed feed={feed} />
         </Grid>
-        <Grid item xs={2}>
-          <Item>maybe stuff here</Item>
-        </Grid>
+        <Grid item xs={2} />
       </Grid>
       <PostModal feed={feed} setFeed={setFeed} />
     </Box>
