@@ -1,4 +1,5 @@
 import './App.css';
+import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import React from 'react';
 import Login from './Login';
@@ -11,6 +12,19 @@ import Messages from './Messages';
 import PostPage from './PostPage';
 
 function App() {
+  const url = 'ws://localhost:8080/testWebsocket2/keeratg@gmail.com';
+  const ws = new W3CWebSocket(url);
+
+  ws.onopen = () => {
+    console.log('connected to websocket!');
+    const data = { fromEmail: 'keeratg@gmail.com', toEmail: 'random', content: 'gord' };
+    ws.send(JSON.stringify(data));
+  };
+
+  ws.onmessage = (e) => {
+    console.log(e);
+  };
+
   return (
     <div className="App">
       {/* <header className="App-header">
