@@ -22,6 +22,7 @@ export function WebsocketProvider({ children }) {
     //   const data = { fromEmail: 'keeratg@gmail.com', toEmail: 'random', content: 'gord' };
     //   ws.send(JSON.stringify(data));
     // };
+    // hi
   }, []);
 
   return (
