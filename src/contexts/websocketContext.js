@@ -1,9 +1,7 @@
 import React, { useContext, createContext, useEffect } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
-import { useAuth } from './authContext';
 
-const { currentUser } = useAuth();
-const url = `${process.env.REACT_APP_WEBSOCKET}/testWebsocket2/${currentUser.multiFactor.user.email}`;
+const url = `${process.env.REACT_APP_WEBSOCKET}/testWebsocket2/keeratg@gmail.com`;
 
 const ws = new W3CWebSocket(url);
 
