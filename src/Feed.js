@@ -25,7 +25,6 @@ import TextField from '@mui/material/TextField';
 import Link from '@mui/material/Link';
 import axios from 'axios';
 import { useAuth } from './contexts/authContext';
-import { useWebsocket } from './contexts/websocketContext';
 
 // General structure of a post in the feed
 // Need to retrieve posts and use mapping to display in this way
@@ -37,13 +36,13 @@ export function CardThing({ src, date, title, content, linkUrl, email, postId, l
   const [comments, setComments] = useState([]);
   const [showComments, setShowComments] = useState(false);
   const [commentValue, setComment] = useState();
-  const ws = useWebsocket();
   
-  ws.onopen = () => {
-    console.log('connected to websocket');
-    // const data = { fromEmail: 'keeratg@gmail.com', toEmail: 'random', content: 'gord' };
-    // ws.send(JSON.stringify(data));
-  };
+
+  // ws.onopen = () => {
+  //   console.log('connected to websocket');
+  //   // const data = { fromEmail: 'keeratg@gmail.com', toEmail: 'random', content: 'gord' };
+  //   // ws.send(JSON.stringify(data));
+  // };
 
   const updateLike = async () => {
     const backend = `${process.env.REACT_APP_BACKEND_HOST}/post/like`;

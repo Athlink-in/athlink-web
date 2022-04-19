@@ -1,9 +1,16 @@
+/* eslint-disable */
+
 import React, { useContext, createContext, useEffect } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 
 const url = 'ws://localhost:8080/testWebsocket2/keeratg@gmail.com';
 
 const ws = new W3CWebSocket(url);
+
+ws.onopen = () => {
+  console.log('connected to websocket!');
+};
+
 
 const WebsocketContext = createContext(ws);
 

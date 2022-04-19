@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Grid from '@mui/material/Grid';
 // import ListItem from '@mui/material/ListItem';
 // import ListItemText from '@mui/material/ListItemText';
@@ -18,6 +18,8 @@ import SendIcon from '@mui/icons-material/Send';
 // import ImageIcon from '@mui/icons-material/Image';
 import NavBar from './NavBar';
 import MessageTabs from './MessageTabs';
+import { useAuth } from './contexts/authContext';
+import { useWebsocket } from './contexts/websocketContext';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -27,7 +29,65 @@ const Item = styled(Paper)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
+function Message({ user, content }) {
+  // const flag = user === currentUser.multiFactor.user.email
+  return (
+    <Box
+      label={user ? 'sent' : 'received'}
+      sx={{
+        position: 'relative',
+        borderRadius: 16,
+        padding: '4px 15px',
+        display: 'inline-block',
+        /* display: flex; */
+        /* flex-direction: column; */
+        mt: '5px',
+        mb: '5px',
+        mr: user ? 'auto' : '5px',
+        ml: user ? '5px' : 'auto',
+        background: user ? '#4976BA' : '#e5e5ea',
+        color: user ? 'white' : 'black',
+        float: user ? 'left' : 'right',
+        // background: '#4976BA',
+        // color: 'white',
+        // float: 'right',
+      }}
+    >
+      {content}
+    </Box>
+  );
+}
+
 export default function Messages() {
+  const { currentUser } = useAuth();
+  const ws = useWebsocket();
+  /* eslint-disable */
+  const [messages, setMessages] = useState([
+    {
+      fromEmail: "karvirishaan@gmail.com",
+      toEmail: "keeratg@gmail.com",
+      content: "hi there",
+      timeStamp: "312412431"
+    },
+    {
+      fromEmail: "keeratg@gmail.com",
+      toEmail: "karvirishaan@gmail.com",
+      content: "hi",
+      timeStamp: "312412431"
+    },
+  ])
+
+  useEffect(() => {
+    ws.onmessage = (e) => {
+      console.log(e)
+      const data = JSON.parse(e.data)
+      setMessages(prev => [...prev, data])
+
+      // const backend = `${process.env.REACT_APP_BACKEND_HOST}/${currentUser.multiFactor.user.email}/messages`;
+      // axios.get(backend).then((data) => setMessages(data)).catch(
+      // (error) => console.log(error))
+    }
+  }, [])
   return (
     <Grid container component='main'>
       <NavBar />
@@ -122,44 +182,9 @@ export default function Messages() {
                 position: 'relative',
               }}
             >
-              <Box
-                label='received'
-                sx={{
-                  position: 'relative',
-                  borderRadius: 16,
-                  padding: '4px 15px',
-                  display: 'inline-block',
-                  /* display: flex; */
-                  /* flex-direction: column; */
-                  mt: '5px',
-                  mb: '5px',
-                  mr: 'auto',
-                  background: '#e5e5ea',
-                  color: 'black',
-                  float: 'left',
-                }}
-              >
-                hello
-              </Box>
-              <Box
-                label='sent'
-                sx={{
-                  position: 'relative',
-                  borderRadius: 16,
-                  padding: '4px 15px',
-                  display: 'inline-block',
-                  /* display: flex; */
-                  /* flex-direction: column; */
-                  mt: '5px',
-                  mb: '5px',
-                  ml: 'auto',
-                  background: '#4976BA',
-                  color: 'white',
-                  float: 'right',
-                }}
-              >
-                hi there
-              </Box>
+              {messages && messages.map(({ fromEmail, content }) => (
+                <Message user={fromEmail !== currentUser.multiFactor.user.email} content={content}></Message>
+              ))}
             </Box>
 
             {/* This is the typing box */}
