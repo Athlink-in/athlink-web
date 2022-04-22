@@ -1,29 +1,50 @@
-import React, { useContext, createContext, useEffect } from 'react';
+import React, { useContext, createContext } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
+import { useAuth } from './authContext';
 
-const url = `${process.env.REACT_APP_WEBSOCKET}/testWebsocket2/keeratg@gmail.com`;
+// const url = `${process.env.REACT_APP_WEBSOCKET}/testWebsocket2/keeratg@gmail.com`;
 
-const ws = new W3CWebSocket(url);
+// const ws = new W3CWebSocket(url);
 
-ws.onopen = () => {
-  console.log('connected to websocket!');
-};
+// ws.onopen = () => {
+//   console.log('connected to websocket!');
+// };
 
-const WebsocketContext = createContext(ws);
+// const WebsocketContext = createContext(ws);
+const WebsocketContext = createContext(null);
+// export function getUserEmail() {
+//   const { currentUser } = useAuth();
+//   return (currentUser.multiFactor.user.email);
+// }
 
 export function useWebsocket() {
-  return useContext(WebsocketContext);
+  const { socket } = useContext(WebsocketContext);
+  console.log(socket);
+  return socket;
 }
 
 export function WebsocketProvider({ children }) {
-  useEffect(() => {
-    // ws.onopen = () => {
-    //   console.log('connected to websocket!');
-    //   const data = { fromEmail: 'keeratg@gmail.com', toEmail: 'random', content: 'gord' };
-    //   ws.send(JSON.stringify(data));
-    // };
-    // hi
-  }, []);
+  const { currentUser } = useAuth();
+  // const [ws, setWS] = useState();
+  // const ws = useRef(null);
+  let socket;
+  let ws;
+
+  const url = `${process.env.REACT_APP_WEBSOCKET}/testWebsocket2/${currentUser.multiFactor.user.email}`;
+
+  if (!socket) {
+    socket = new W3CWebSocket(url);
+
+    socket.onopen = () => {
+      console.log('connected to websocket!');
+      const data = { fromEmail: 'keeratg@gmail.com', toEmail: 'random', content: 'gord' };
+      socket.send(JSON.stringify(data));
+    };
+
+    ws = {
+      socket,
+    };
+  }
 
   return (
     <div>
