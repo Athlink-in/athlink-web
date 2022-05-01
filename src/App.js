@@ -1,15 +1,8 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import React from 'react';
-import Login from './Login';
+import { BrowserRouter as Router } from 'react-router-dom';
 import { AuthProvider } from './contexts/authContext';
-import { WebsocketProvider } from './contexts/websocketContext';
-import PrivateRoute from './PrivateRoute';
-import MainContent from './mainContent';
-import About from './About';
-import Profile from './Profile';
-import Messages from './Messages';
-import PostPage from './PostPage';
+import UserContent from './UserContent';
 
 function App() {
   // const url = 'ws://localhost:8080/testWebsocket2/keeratg@gmail.com';
@@ -43,20 +36,7 @@ function App() {
       </header> */}
       <Router>
         <AuthProvider>
-          <WebsocketProvider>
-            <Routes>
-              <Route exact path="/login" element={<Login />} />
-              <Route exact path='/' element={<PrivateRoute />}>
-                <Route exact path='/' element={<MainContent />} />
-                {/* <Route exact path='/about' element={<About />}> </Route> */}
-                <Route exact path='/profile' element={<Profile />}> </Route>
-                <Route path="/profile/:email" element={<Profile />} />
-                <Route exact path='/messages' element={<Messages />} />
-                <Route path='/post/:postId' element={<PostPage />} />
-              </Route>
-              <Route exact path='/about' element={<About />}> </Route>
-            </Routes>
-          </WebsocketProvider>
+          <UserContent />
         </AuthProvider>
       </Router>
     </div>

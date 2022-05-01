@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import Grid from '@mui/material/Grid';
 // import ListItem from '@mui/material/ListItem';
 // import ListItemText from '@mui/material/ListItemText';
@@ -58,6 +59,9 @@ function Message({ user, content }) {
   );
 }
 
+// function MessageBox( { connection }){
+// }
+
 export default function Messages() {
   const { currentUser } = useAuth();
   const ws = useWebsocket();
@@ -76,6 +80,7 @@ export default function Messages() {
       timeStamp: "312412431"
     },
   ])
+  const [connections, setConnections] = useState();
 
   useEffect(() => {
     ws.onmessage = (e) => {
@@ -87,12 +92,14 @@ export default function Messages() {
       // axios.get(backend).then((data) => setMessages(data)).catch(
       // (error) => console.log(error))
     }
+    const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/connections/${currentUser.multiFactor.user.email}`;
+    axios.get(backend).then((data) => setConnections(data.data));
   }, [])
   return (
     <Grid container component='main'>
       <NavBar />
       <Grid container spacing={1} justifyContent='center' sx={{ mt: 1 }}>
-        <MessageTabs />
+        <MessageTabs tabs={connections}/>
         {/* {This is the names side} */}
         {/* <Grid
           item

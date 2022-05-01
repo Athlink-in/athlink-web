@@ -13,7 +13,7 @@ import IconButton from '@mui/material/IconButton';
 import Divider from '@mui/material/Divider';
 import AddCommentOutlinedIcon from '@mui/icons-material/AddCommentOutlined';
 
-export default function MessageTabs() {
+export default function MessageTabs({ tabs }) {
   // const [value, setValue] = React.useState(0);
 
   // const handleChange = (event, newValue) => {
@@ -54,14 +54,22 @@ export default function MessageTabs() {
       </Box>
       <Divider />
 
-      <ListItem>
+      {/* <ListItem>
         <ListItemAvatar>
           <Avatar sx={{ bgcolor: '#4976BA' }}>
             B
           </Avatar>
         </ListItemAvatar>
         <ListItemText primary="Brandon Burana" secondary="Hello!" />
-      </ListItem>
+      </ListItem> */}
+      {tabs && tabs.map((x) => (
+        <ListItem onClick={() => { console.log('clicked on tab'); }}>
+          <ListItemAvatar>
+            <Avatar src={x.photoURL} sx={{ bgcolor: '#4976BA' }} />
+          </ListItemAvatar>
+          <ListItemText primary={`${x.firstname} ${x.lastname}`} />
+        </ListItem>
+      ))}
       <Divider />
     </Grid>
   );
