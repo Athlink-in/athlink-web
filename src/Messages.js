@@ -98,11 +98,16 @@ function MessageBox({ connection, currentUser }) {
 
 
     ws.onmessage = (e) => {
-      console.log(e)
-      const data = JSON.parse(e.data)
-      console.log("this is data" + data)
-      if(data.toEmail === currentUser.multiFactor.user.email){
-        setMessages(prev => [...prev, data])
+      if (e.data === 'pong') {
+        console.log('received pong');
+      }
+      else{
+        console.log(e)
+        const data = JSON.parse(e.data)
+        console.log("this is data" + data)
+        if(data.toEmail === currentUser.multiFactor.user.email){
+          setMessages(prev => [...prev, data])
+        }
       }
     }
   }, [])

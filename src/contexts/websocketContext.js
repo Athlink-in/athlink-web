@@ -32,6 +32,7 @@ export function WebsocketProvider({ children }) {
     };
   }, []);
   useEffect(() => {
+    let interval = null;
     if (socket) {
       socket.onopen = () => {
         console.log('connected to websocket!');
@@ -41,11 +42,18 @@ export function WebsocketProvider({ children }) {
       socket.onclose = () => {
         console.log('I AM Closing socket');
       };
+      socket.onmessage = (e) => {
+        if (e.data === 'pong') {
+          console.log('received pong');
+        }
+      };
+      interval = setInterval(() => {
+        socket.send('ping');
+      }, 5000);
     }
     return () => {
-      if (socket) {
-        console.log('HERE 2');
-        socket.close();
+      if (interval) {
+        clearInterval(interval);
       }
     };
   }, [socket]);
