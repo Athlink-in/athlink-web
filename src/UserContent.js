@@ -24,7 +24,6 @@ function AppRoutes() {
       </Route>
       <Route exact path='/about' element={<About />}> </Route>
     </Routes>
-
   );
 }
 
@@ -33,11 +32,9 @@ export default function () {
   if (currentUser) {
     return (
       <div>
-        (
         <WebsocketProvider>
           <AppRoutes />
         </WebsocketProvider>
-        )
       </div>
     );
   }

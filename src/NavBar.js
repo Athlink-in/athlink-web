@@ -18,6 +18,7 @@ import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Logo from './logos/logo_side_text.png';
 import { useAuth } from './contexts/authContext';
+import { useWebsocket } from './contexts/websocketContext';
 
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
@@ -64,6 +65,12 @@ function NavBar() {
   // const handleProfileOpen = () => (
   //   <Link to='/profile' />
   // );
+  const ws = useWebsocket();
+
+  const logout = () => {
+    signout();
+    ws.close();
+  };
 
   const settings = [
     {
@@ -72,7 +79,7 @@ function NavBar() {
     { name: 'Profile',
       fun: '/profile' },
     { name: 'Logout',
-      fun: signout }];
+      fun: logout }];
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const isMenuOpen = Boolean(anchorEl);

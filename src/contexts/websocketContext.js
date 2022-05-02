@@ -6,7 +6,7 @@ const WebsocketContext = createContext(null);
 
 export function useWebsocket() {
   const socket = useContext(WebsocketContext);
-  console.log(socket);
+  // console.log(socket);
   return socket;
 }
 
@@ -20,9 +20,15 @@ export function WebsocketProvider({ children }) {
   const url = `${process.env.REACT_APP_WEBSOCKET}/testWebsocket2/${currentUser.multiFactor.user.email}`;
 
   useEffect(() => {
-    setSocket(new W3CWebSocket(url));
+    if (!socket) {
+      console.log('HERE');
+      setSocket(new W3CWebSocket(url));
+    }
     return () => {
-      socket.close();
+      console.log('dismounting');
+      if (socket) {
+        socket.close();
+      }
     };
   }, []);
   useEffect(() => {
@@ -33,9 +39,15 @@ export function WebsocketProvider({ children }) {
         // socket.send(JSON.stringify(data));
       };
       socket.onclose = () => {
-        console.log('Closing socket');
+        console.log('I AM Closing socket');
       };
     }
+    return () => {
+      if (socket) {
+        console.log('HERE 2');
+        socket.close();
+      }
+    };
   }, [socket]);
 
   return (
