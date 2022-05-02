@@ -106,7 +106,7 @@ function MessageBox({ connection, currentUser }) {
         const data = JSON.parse(e.data)
         console.log("this is data" + data)
         if((data.toEmail === currentUser.multiFactor.user.email) && 
-          data.fromEmail === email){
+          (data.fromEmail === email)){
           setMessages(prev => [...prev, data])
         }
       }
