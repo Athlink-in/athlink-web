@@ -78,6 +78,7 @@ function MessageBox({ connection, currentUser }) {
       timeStamp: "312412431"
     },
   ])
+  console.log(email);
   function handleMessageSubmit(){
     const message = {
       fromEmail : currentUser.multiFactor.user.email,
@@ -95,13 +96,30 @@ function MessageBox({ connection, currentUser }) {
   }, [connection])
   
   useEffect(() => {
-
-
     ws.onmessage = (e) => {
       if (e.data === 'pong') {
         console.log('received pong');
       }
       else{
+        console.log(email);
+        console.log(e)
+        const data = JSON.parse(e.data)
+        console.log("this is data" + data)
+        if((data.toEmail === currentUser.multiFactor.user.email) && 
+          (data.fromEmail === email)){
+          setMessages(prev => [...prev, data])
+        }
+      }
+    }
+  }, [email])
+
+  useEffect(() => {
+    ws.onmessage = (e) => {
+      if (e.data === 'pong') {
+        console.log('received pong');
+      }
+      else{
+        console.log(email);
         console.log(e)
         const data = JSON.parse(e.data)
         console.log("this is data" + data)

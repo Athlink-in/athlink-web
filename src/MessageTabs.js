@@ -63,7 +63,7 @@ export default function MessageTabs({ tabs, setTab }) {
         <ListItemText primary="Brandon Burana" secondary="Hello!" />
       </ListItem> */}
       {tabs && tabs.map((x) => (
-        <ListItem onClick={() => { setTab(x); }}>
+        <ListItem onClick={() => setTab(x)}>
           <ListItemAvatar>
             <Avatar src={x.photoURL} sx={{ bgcolor: '#4976BA' }} />
           </ListItemAvatar>
