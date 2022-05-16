@@ -1,4 +1,6 @@
-import React from 'react';
+/* eslint-disable */
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
@@ -9,6 +11,11 @@ import Menu from '@mui/material/Menu';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 // import Typography from '@mui/material/Typography';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableRow from '@mui/material/TableRow';
 import SearchIcon from '@mui/icons-material/Search';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
@@ -65,7 +72,28 @@ function NavBar() {
   // const handleProfileOpen = () => (
   //   <Link to='/profile' />
   // );
+  const [userSearch, setSearch] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
   const ws = useWebsocket();
+
+  useEffect(() => {
+    if (userSearch !== '') {
+      const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/search/${userSearch}`;
+      axios.get(backend).then((data) => {
+        console.log(data);
+        setSearchResults(data.data);
+      });
+      console.log(searchResults);
+    }
+    else {
+      setSearchResults([]);
+    }
+  }, [userSearch]);
+
+  const handleChange = (e) => {
+    setSearch(e.target.value);
+    console.log(userSearch);
+  };
 
   const logout = () => {
     signout();
@@ -139,15 +167,32 @@ function NavBar() {
               />
             </Link>
           </IconButton>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
+          <Box sx={{ display: 'flex', flexDirection: 'column'}}>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+                onChange={handleChange}
+              />
+            </Search>
+            <TableContainer>
+              <Table>
+                <TableBody>
+                  {searchResults.map((row) => (
+                    <TableRow key={row.name}>
+                      <TableCell align="left">
+                        `${row.firstname}
+                        {row.lastname}`
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
