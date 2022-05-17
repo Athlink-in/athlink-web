@@ -103,7 +103,7 @@ function NavBar() {
       //   await new Promise(r => setTimeout(r, 2000));
       //   setSearchResults(data.data);
       // });
-      const data =  await axios.get(backend, {value: userSearch})
+      const data =  await axios.get(backend, {params: {value: userSearch}})
       let temp = data.data.slice()
       let maptemp = {}
       for(let i = 0; i < temp.length; i++){
