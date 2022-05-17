@@ -10,16 +10,25 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
+
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Link from '@mui/material/Link';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+
 // import Typography from '@mui/material/Typography';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableRow from '@mui/material/TableRow';
 import SearchIcon from '@mui/icons-material/Search';
-import IconButton from '@mui/material/IconButton';
-import Link from '@mui/material/Link';
 // import Button from '@mui/material/Button';
+import DisplayProfile from './Connections';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import MailIcon from '@mui/icons-material/Mail';
 import NotificationsIcon from '@mui/icons-material/Notifications';
@@ -73,26 +82,56 @@ function NavBar() {
   //   <Link to='/profile' />
   // );
   const [userSearch, setSearch] = useState('');
+  const [map, setMap] = useState({});
   const [searchResults, setSearchResults] = useState([]);
   const ws = useWebsocket();
 
+  // search for people
   useEffect(() => {
     if (userSearch !== '') {
       const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/search/${userSearch}`;
       axios.get(backend).then((data) => {
-        console.log(data);
+        let temp = data.data.slice()
+        let res = []
+        let maptemp = {}
+        for(let i = 0; i < temp.length; i++){
+          console.log(temp[i]);
+          maptemp[temp[i].email] = temp[i]
+        }
+        setMap(maptemp);
         setSearchResults(data.data);
       });
-      console.log(searchResults);
+      //console.log(searchResults);
     }
     else {
       setSearchResults([]);
     }
   }, [userSearch]);
 
+  // // search for posts
+  // useEffect(() => {
+  //   if (userSearch !== '') {
+  //     const backend = `${process.env.REACT_APP_BACKEND_HOST}/post/search/${userSearch}`;
+  //     axios.get(backend).then((data) => {
+  //       // console.log(data)
+  //       let temp = data.data.slice()
+  //       let res = []
+  //       for(let i = 0; i < temp.length; i++){
+  //         // console.log(temp[i]);
+  //         res.push(`${temp[i].userEmail} ${temp[i].postContent.slice(0,10)}`)
+  //       }
+  //       setSearchResults(prev => [...prev, res]);
+  //     });
+  //     //console.log(searchResults);
+  //   }
+  //   else {
+  //     setSearchResults([]);
+  //   }
+  // }, [userSearch]);
+
   const handleChange = (e) => {
     setSearch(e.target.value);
-    console.log(userSearch);
+    //console.log(userSearch);
   };
 
   const logout = () => {
@@ -167,18 +206,61 @@ function NavBar() {
               />
             </Link>
           </IconButton>
-          <Box sx={{ display: 'flex', flexDirection: 'column'}}>
+          <Box sx={{ display: 'flex', flexDirection: 'row'}}>
             <Search>
               <SearchIconWrapper>
                 <SearchIcon />
               </SearchIconWrapper>
-              <StyledInputBase
+              {/* <StyledInputBase
                 placeholder="Search…"
                 inputProps={{ 'aria-label': 'search' }}
                 onChange={handleChange}
-              />
+              /> */}
             </Search>
-            <TableContainer>
+            <Autocomplete
+                disablePortal
+                id="combo-box-demo"
+                options={searchResults}
+                getOptionLabel={(x) => 
+                  `${x.email}`
+                }
+                renderOption={(x) => {
+                  let val = map[x.key];
+                  let realName = `${val.firstname} ${val.lastname}`
+
+                  return (
+                    <Card>
+                      <CardHeader
+                        avatar={(
+                          <Link href={`/profile/${val.email}`} sx={{ textDecoration: 'none' }}>
+                            <Avatar
+                              alt={realName}
+                              src={val.photoURL}
+                              aria-label="test2"
+                              sx={{ height: 48, width: 48 }}
+                            />
+                          </Link>
+                        )}
+                        action={(
+                          <IconButton aria-label="settings">
+                            <MoreVertIcon />
+                          </IconButton>
+                        )}
+                        titleTypographyProps={{ variant: 'inherit' }}
+                        subheaderTypographyProps={{ variant: 'inherit' }}
+                        title={(
+                          <Link href={`/profile/${val.email}`} sx={{ textDecoration: 'none' }}>
+                            {`${val.firstname} ${val.lastname}`}
+                          </Link>
+                          )}
+                        sx={{ textAlign: 'left' }}
+                      />
+                    </Card>);
+                }}
+                sx={{ width: 300 }}
+                renderInput={(params) => <TextField size="normal" sx={{marginLeft: 5, backgroundColor: 'white'}} onChange={handleChange} {...params} label="Search" />}
+              />
+            {/* <TableContainer>
               <Table>
                 <TableBody>
                   {searchResults.map((row) => (
@@ -191,7 +273,7 @@ function NavBar() {
                   ))}
                 </TableBody>
               </Table>
-            </TableContainer>
+            </TableContainer> */}
           </Box>
           <Box sx={{ flexGrow: 1 }} />
           <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
