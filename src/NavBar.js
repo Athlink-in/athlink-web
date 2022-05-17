@@ -87,20 +87,34 @@ function NavBar() {
   const ws = useWebsocket();
 
   // search for people
-  useEffect(() => {
+  useEffect(async () => {
     if (userSearch !== '') {
-      const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/search/${userSearch}`;
-      axios.get(backend).then((data) => {
-        let temp = data.data.slice()
-        let res = []
-        let maptemp = {}
-        for(let i = 0; i < temp.length; i++){
-          console.log(temp[i]);
-          maptemp[temp[i].email] = temp[i]
-        }
-        setMap(maptemp);
-        setSearchResults(data.data);
-      });
+      const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/search`;
+      // const data =  await axios.get(backend).then((data) => {
+      //   let temp = data.data.slice()
+      //   let res = []
+      //   let maptemp = {}
+      //   for(let i = 0; i < temp.length; i++){
+      //     console.log(temp[i]);
+      //     maptemp[temp[i].email] = temp[i]
+      //   }
+      //   setMap(maptemp);
+      //   //sleep(500);
+      //   await new Promise(r => setTimeout(r, 2000));
+      //   setSearchResults(data.data);
+      // });
+      const data =  await axios.get(backend, {value: userSearch})
+      let temp = data.data.slice()
+      let maptemp = {}
+      for(let i = 0; i < temp.length; i++){
+        console.log(temp[i]);
+        maptemp[temp[i].email] = temp[i]
+      }
+      setMap(maptemp);
+      //sleep(500);
+      await new Promise(r => setTimeout(r, 500));
+      setSearchResults(data.data);
+      
       //console.log(searchResults);
     }
     else {
