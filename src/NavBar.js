@@ -107,12 +107,12 @@ function NavBar() {
       let temp = data.data.slice()
       let maptemp = {}
       for(let i = 0; i < temp.length; i++){
-        console.log(temp[i]);
+        //console.log(temp[i]);
         maptemp[temp[i].email] = temp[i]
       }
       setMap(maptemp);
       //sleep(500);
-      await new Promise(r => setTimeout(r, 500));
+      await new Promise(r => setTimeout(r, 1000));
       setSearchResults(data.data);
       
       //console.log(searchResults);
