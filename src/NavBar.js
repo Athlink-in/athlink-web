@@ -76,6 +76,63 @@ const SearchIconWrapper = styled('div')(({ theme }) => ({
   justifyContent: 'center',
 }));
 
+function DisplayProfiles( {val} ) {
+  let realName = `${val.firstname} ${val.lastname}`;
+  return (
+    <Card>
+      <CardHeader
+        avatar={(
+          <Link href={`/profile/${val.email}`} sx={{ textDecoration: 'none' }}>
+            <Avatar
+              alt={realName}
+              src={val.photoURL}
+              aria-label="test2"
+              sx={{ height: 48, width: 48 }}
+            />
+          </Link>
+        )}
+        action={(
+          <IconButton aria-label="settings">
+            <MoreVertIcon />
+          </IconButton>
+        )}
+        titleTypographyProps={{ variant: 'inherit' }}
+        subheaderTypographyProps={{ variant: 'inherit' }}
+        title={(
+          <Link href={`/profile/${val.email}`} sx={{ textDecoration: 'none' }}>
+            {`${val.firstname} ${val.lastname}`}
+          </Link>
+          )}
+        sx={{ textAlign: 'left' }}
+      />
+    </Card>
+  );
+}
+
+function DisplayPosts( {val} ) {
+  let elipse = val.postContent.length > 30 ? "..." : "";
+  let content = val.postContent.slice(0, 30) + elipse;
+  return (
+    <Card>
+      <CardHeader
+        action={(
+          <IconButton aria-label="settings">
+            <MoreVertIcon />
+          </IconButton>
+        )}
+        titleTypographyProps={{ variant: 'inherit' }}
+        subheaderTypographyProps={{ variant: 'inherit' }}
+        title={(
+          <Link href={`/post/${val.postId}`} sx={{ textDecoration: 'none' }}>
+            {`${content}`}
+          </Link>
+          )}
+        sx={{ textAlign: 'left' }}
+      />
+    </Card>
+  );
+}
+
 function NavBar() {
   const { signout, currentUser } = useAuth();
   // const handleProfileOpen = () => (
@@ -84,6 +141,7 @@ function NavBar() {
   const [userSearch, setSearch] = useState('');
   const [map, setMap] = useState({});
   const [searchResults, setSearchResults] = useState([]);
+  const [searchPostResults, setSearchPostResults] = useState([]);
   const ws = useWebsocket();
 
   // search for people
@@ -109,6 +167,7 @@ function NavBar() {
       //sleep(500);
       // await new Promise(r => setTimeout(r, 1000));
       setSearchResults(userData.data);
+      setSearchPostResults(postData.data);
       
       //console.log(searchResults);
     }
@@ -116,27 +175,6 @@ function NavBar() {
       setSearchResults([]);
     }
   }, [userSearch]);
-
-  // // search for posts
-  // useEffect(() => {
-  //   if (userSearch !== '') {
-  //     const backend = `${process.env.REACT_APP_BACKEND_HOST}/post/search/${userSearch}`;
-  //     axios.get(backend).then((data) => {
-  //       // console.log(data)
-  //       let temp = data.data.slice()
-  //       let res = []
-  //       for(let i = 0; i < temp.length; i++){
-  //         // console.log(temp[i]);
-  //         res.push(`${temp[i].userEmail} ${temp[i].postContent.slice(0,10)}`)
-  //       }
-  //       setSearchResults(prev => [...prev, res]);
-  //     });
-  //     //console.log(searchResults);
-  //   }
-  //   else {
-  //     setSearchResults([]);
-  //   }
-  // }, [userSearch]);
 
   const handleChange = (e) => {
     setSearch(e.target.value);
@@ -229,56 +267,23 @@ function NavBar() {
             <Autocomplete
                 disablePortal
                 id="combo-box-demo"
-                options={searchResults}
-                getOptionLabel={(x) => 
-                  `${x.firstname} ${x.lastname}`
-                }
+                options={searchResults.concat(searchPostResults)}
+                getOptionLabel={(x) => {
+                  if (x.postId) {
+                    return `${x.postContent}`
+                  }
+                  else {
+                    return `${x.firstname} ${x.lastname}`
+                  }
+                }}
                 renderOption={(props, option, state) => {
-                  // console.log(props, option, state);
-                  // console.log(x);
-                  // console.log("Map is:")
-                  // console.log(map);
-                  // console.log(`key is ${x.key}`);
-                  // let val = map[x.key];
-
-                  // console.log(`val is ${val}`);
-                  console.log("option is");
-                  console.log(props);
-                  console.log(option);
-                  console.log(state);
-
-
                   let val = option;
-                  let realName = `${val.firstname} ${val.lastname}`
-              
                   return (
-                    <Card>
-                      <CardHeader
-                        avatar={(
-                          <Link href={`/profile/${val.email}`} sx={{ textDecoration: 'none' }}>
-                            <Avatar
-                              alt={realName}
-                              src={val.photoURL}
-                              aria-label="test2"
-                              sx={{ height: 48, width: 48 }}
-                            />
-                          </Link>
-                        )}
-                        action={(
-                          <IconButton aria-label="settings">
-                            <MoreVertIcon />
-                          </IconButton>
-                        )}
-                        titleTypographyProps={{ variant: 'inherit' }}
-                        subheaderTypographyProps={{ variant: 'inherit' }}
-                        title={(
-                          <Link href={`/profile/${val.email}`} sx={{ textDecoration: 'none' }}>
-                            {`${val.firstname} ${val.lastname}`}
-                          </Link>
-                          )}
-                        sx={{ textAlign: 'left' }}
-                      />
-                    </Card>);
+                    <Box>
+                      {option.firstname && <DisplayProfiles val={val} />}
+                      {option.postId && <DisplayPosts val={val} />}
+                    </Box>
+                  );
                 }}
                 sx={{ width: 300 }}
                 renderInput={(params) => <TextField size="normal" sx={{marginLeft: 5, backgroundColor: 'white'}} onChange={handleChange} {...params} label="Search" />}
