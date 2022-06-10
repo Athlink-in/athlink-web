@@ -92,19 +92,22 @@ function NavBar() {
       const backend = `${process.env.REACT_APP_BACKEND_HOST}/user/search`;
       const postDataCall = `${process.env.REACT_APP_BACKEND_HOST}/post/post_keyword`;
 
+      // console.log(`making call for ${userSearch}`);
       const userData =  await axios.get(backend, {params: {value: userSearch}})
       const postData = await axios.get(postDataCall, { params: { keywords: userSearch} });
-      console.log(postData);
+      // console.log(postData);
+      // console.log("Returned : ")
+      // console.log(userData);
 
       let temp = userData.data.slice()
-      let maptemp = {}
-      for(let i = 0; i < temp.length; i++){
-        //console.log(temp[i]);
-        maptemp[temp[i].email] = temp[i]
-      }
-      setMap(maptemp);
+      // let maptemp = {}
+      // for(let i = 0; i < temp.length; i++){
+      //   //console.log(temp[i]);
+      //   maptemp[temp[i].email] = temp[i]
+      // }
+      // setMap(maptemp);
       //sleep(500);
-      await new Promise(r => setTimeout(r, 1000));
+      // await new Promise(r => setTimeout(r, 1000));
       setSearchResults(userData.data);
       
       //console.log(searchResults);
@@ -228,12 +231,26 @@ function NavBar() {
                 id="combo-box-demo"
                 options={searchResults}
                 getOptionLabel={(x) => 
-                  `${x.email}`
+                  `${x.firstname} ${x.lastname}`
                 }
-                renderOption={(x) => {
-                  let val = map[x.key];
-                  let realName = `${val.firstname} ${val.lastname}`
+                renderOption={(props, option, state) => {
+                  // console.log(props, option, state);
+                  // console.log(x);
+                  // console.log("Map is:")
+                  // console.log(map);
+                  // console.log(`key is ${x.key}`);
+                  // let val = map[x.key];
 
+                  // console.log(`val is ${val}`);
+                  console.log("option is");
+                  console.log(props);
+                  console.log(option);
+                  console.log(state);
+
+
+                  let val = option;
+                  let realName = `${val.firstname} ${val.lastname}`
+              
                   return (
                     <Card>
                       <CardHeader
