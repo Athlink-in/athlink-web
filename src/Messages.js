@@ -79,7 +79,7 @@ function MessageBox({ connection, currentUser }) {
     },
   ])
   console.log(email);
-  function handleMessageSubmit(){
+  const handleMessageSubmit = () => {
     const message = {
       fromEmail : currentUser.multiFactor.user.email,
       toEmail : email,
@@ -88,6 +88,7 @@ function MessageBox({ connection, currentUser }) {
     };
     ws.send(JSON.stringify(message));
     setMessages(prev => [...prev, message]);
+    setInput("");
   }
 
   useEffect(() => {
@@ -107,7 +108,7 @@ function MessageBox({ connection, currentUser }) {
         console.log("this is data" + data)
         if((data.toEmail === currentUser.multiFactor.user.email) && 
           (data.fromEmail === email)){
-          setMessages(prev => [...prev, data])
+          setMessages(prev => [...prev, data]);
         }
       }
     }
@@ -196,7 +197,7 @@ function MessageBox({ connection, currentUser }) {
             variant='contained'
             onClick={handleMessageSubmit}
             endIcon={<SendIcon />}
-            sx={{ backgroundColor: '#4976BA', fontWeight: 'bold', mr: 'auto', mt: 'auto', width: '90px', height: '55px' }}
+            sx={{ backgroundColor: '#4976BA', fontWeight: 'bold', mt: 'auto', width: '90px', height: '55px' }}
           >
             Send
           </Button>
